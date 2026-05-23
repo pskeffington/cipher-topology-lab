@@ -1,0 +1,72 @@
+name: Manuscript Analysis
+
+on:
+  workflow_dispatch:
+    inputs:
+      config:
+        description: "Analysis configuration file"
+        required: true
+        default: "configs/manuscript_30rep.json"
+
+jobs:
+  manuscript-analysis:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install package with TDA extras
+        run: python -m pip install -e ".[dev,tda]"
+
+      - name: Run tests
+        run: pytest -q
+
+      - name: Run lint checks
+        run: ruff check src scripts tests
+
+      - name: Generate streams
+        run: python scripts/00_generate_streams.py --config ${{ github.event.inputs.config }}
+
+      - name: Build embeddings
+        run: python scripts/01_embed_ciphertext.py --config ${{ github.event.inputs.config }}
+
+      - name: Compute TDA features
+        run: python scripts/02_compute_tda_features.py --config ${{ github.event.inputs.config }}
+
+      - name: Validate ripser backend
+        run: python scripts/07_validate_tda_backend.py --features data/processed/tda_features.csv --require-backend ripser --require-finite-h1
+
+      - name: Validate GUDHI cubical backend
+        run: python scripts/08_validate_backend_present.py --features data/processed/tda_features.csv --require-backend gudhi_cubical
+
+      - name: Run internal randomness diagnostics
+        run: python scripts/03_randomness_tests.py --config ${{ github.event.inputs.config }}
+
+      - name: Analyze outputs
+        run: python scripts/04_analyze_results.py --config ${{ github.event.inputs.config }}
+
+      - name: Export external randomness-test inputs
+        run: python scripts/05_export_randomness_inputs.py --manifest data/raw/stream_manifest.csv
+
+      - name: Parse external randomness-test outputs
+        run: python scripts/06_parse_external_results.py
+
+      - name: Upload manuscript analysis artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: manuscript-analysis-results
+          path: |
+            data/raw/stream_manifest.csv
+            data/interim/embedding_manifest.csv
+            data/processed/*.csv
+            results/tables/*.csv
+            results/figures/*
+            results/logs/*
+            external_tests/inputs/export_manifest.csv
+            results/tables/external_randomness_tests.csv
