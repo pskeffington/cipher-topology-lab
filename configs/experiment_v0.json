@@ -1,0 +1,32 @@
+{
+  "project": "cipher-topology-lab",
+  "version": "0.1.0-pre.0",
+  "master_seed": 20260523,
+  "stream_bytes": 1048576,
+  "replicates": 8,
+  "conditions": [
+    "aes128_ctr_random_plaintext",
+    "aes128_ctr_zero_plaintext",
+    "os_csprng",
+    "lcg_weak",
+    "xorshift32_weak"
+  ],
+  "embeddings": [
+    {
+      "name": "byte_pair_2d",
+      "dimension": 2,
+      "stride": 2,
+      "sample_points": 4096
+    },
+    {
+      "name": "sliding_window_8d",
+      "dimension": 8,
+      "stride": 1,
+      "sample_points": 2048
+    }
+  ],
+  "tda": {
+    "max_edge_length": 0.35,
+    "max_dimension": 1
+  }
+}
