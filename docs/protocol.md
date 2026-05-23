@@ -32,6 +32,10 @@ The initial release uses byte-pair embedding and sliding-window embedding. Later
 
 Initial features include H0/H1 interval counts, finite interval counts, finite lifetime mean, finite lifetime maximum, and persistence entropy.
 
+## Development fallback rule
+
+The codebase includes a fallback threshold-graph backend for smoke testing when optional persistent-homology libraries are unavailable. This backend is not manuscript-grade persistent homology and must not be used as evidence for publication claims. Manuscript evidence must be generated with a true persistent-homology backend such as ripser or GUDHI.
+
 ## Interpretation rule
 
 This project does not certify cipher security. It tests whether topological summaries add diagnostic information relative to conventional tests and known weak controls.
