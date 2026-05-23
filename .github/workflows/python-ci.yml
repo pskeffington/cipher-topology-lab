@@ -48,7 +48,7 @@ jobs:
       - name: Parse external randomness-test outputs
         run: python scripts/06_parse_external_results.py
 
-      - name: Upload generated tables and figures
+      - name: Upload generated diagnostic artifacts
         uses: actions/upload-artifact@v4
         with:
           name: smoke-results
@@ -58,4 +58,6 @@ jobs:
             data/processed/*.csv
             results/tables/*.csv
             results/figures/*
+            results/logs/*
             external_tests/inputs/export_manifest.csv
+            results/tables/external_randomness_tests.csv
