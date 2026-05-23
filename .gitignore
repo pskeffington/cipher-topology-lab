@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Data and generated outputs
+data/raw/*.bin
+data/raw/*.csv
+data/interim/*
+data/processed/*
+results/figures/*
+results/tables/*
+results/logs/*
+!data/raw/.gitkeep
+!data/interim/.gitkeep
+!data/processed/.gitkeep
+!results/figures/.gitkeep
+!results/tables/.gitkeep
+!results/logs/.gitkeep
+
+# LaTeX
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.run.xml
+*.synctex.gz
+*.toc
+manuscript/main.pdf
+
+# OS
+.DS_Store
