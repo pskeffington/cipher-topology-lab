@@ -28,22 +28,22 @@ jobs:
         run: ruff check src scripts tests
 
       - name: Generate smoke streams
-        run: python scripts/00_generate_streams.py --config configs/smoke_test.json
+        run: python scripts/00_generate_streams.py --config configs/cubical_smoke_test.json
 
       - name: Build smoke embeddings
-        run: python scripts/01_embed_ciphertext.py --config configs/smoke_test.json
+        run: python scripts/01_embed_ciphertext.py --config configs/cubical_smoke_test.json
 
-      - name: Compute smoke TDA features with ripser
-        run: python scripts/02_compute_tda_features.py --config configs/smoke_test.json
+      - name: Compute smoke TDA features with ripser and GUDHI
+        run: python scripts/02_compute_tda_features.py --config configs/cubical_smoke_test.json
 
-      - name: Validate manuscript-grade TDA backend
+      - name: Validate ripser backend
         run: python scripts/07_validate_tda_backend.py --features data/processed/tda_features.csv --require-backend ripser --require-finite-h1
 
       - name: Run internal randomness diagnostics
-        run: python scripts/03_randomness_tests.py --config configs/smoke_test.json
+        run: python scripts/03_randomness_tests.py --config configs/cubical_smoke_test.json
 
       - name: Analyze smoke outputs
-        run: python scripts/04_analyze_results.py --config configs/smoke_test.json
+        run: python scripts/04_analyze_results.py --config configs/cubical_smoke_test.json
 
       - name: Export external randomness-test inputs
         run: python scripts/05_export_randomness_inputs.py --manifest data/raw/stream_manifest.csv
