@@ -13,6 +13,12 @@ def write_diagnostic_note(path: Path, message: str) -> None:
     path.write_text(message.strip() + "\n", encoding="utf-8")
 
 
+def remove_stale_h1_plot() -> None:
+    stale_plot = Path("results/figures/h1_persistence_entropy_by_condition.png")
+    if stale_plot.exists():
+        stale_plot.unlink()
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", required=True)
@@ -55,6 +61,7 @@ def main() -> None:
         plt.savefig("results/figures/h1_persistence_entropy_by_condition.png", dpi=300)
         plt.close()
     else:
+        remove_stale_h1_plot()
         write_diagnostic_note(
             Path("results/logs/h1_plot_skipped.txt"),
             "H1 persistence-entropy plot skipped because the run used a fallback backend or produced no finite H1 intervals. Manuscript-grade H1 figures require ripser or GUDHI output with finite H1 intervals.",
