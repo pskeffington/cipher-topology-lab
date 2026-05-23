@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 from tqdm import tqdm
 
-from ciphertopology.tda import compute_ripser_features
+from ciphertopology.tda import compute_cubical_features, compute_ripser_features
 from ciphertopology.utils import ensure_dirs, read_json
 
 
@@ -21,12 +21,15 @@ def main() -> None:
     rows = []
 
     for _, row in tqdm(manifest.iterrows(), total=len(manifest)):
-        points = np.load(row["path"])
-        feature_rows = compute_ripser_features(
-            points,
-            max_dimension=config["tda"]["max_dimension"],
-            max_edge_length=config["tda"]["max_edge_length"],
-        )
+        embedding = np.load(row["path"])
+        if row["embedding_name"] == "cubical_image_2d":
+            feature_rows = compute_cubical_features(embedding)
+        else:
+            feature_rows = compute_ripser_features(
+                embedding,
+                max_dimension=config["tda"]["max_dimension"],
+                max_edge_length=config["tda"]["max_edge_length"],
+            )
         for feat in feature_rows:
             rows.append({
                 "embedding_id": row["embedding_id"],
