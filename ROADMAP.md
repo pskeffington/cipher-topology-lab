@@ -10,7 +10,7 @@ The project is not a cipher-breaking claim. It is a reproducible diagnostics and
 
 ### v0.1.0-pre.0 — Repository scaffold and runnable baseline
 
-Status: active.
+Status: completed.
 
 Exit criteria:
 
@@ -24,6 +24,8 @@ Exit criteria:
 
 ### v0.2.0-pre.0 — Ascon integration
 
+Status: open.
+
 Exit criteria:
 
 - Add a pinned Ascon implementation path.
@@ -33,6 +35,8 @@ Exit criteria:
 - Update manuscript background and methods.
 
 ### v0.3.0-pre.0 — External randomness batteries
+
+Status: completed for export and parser scaffold; pending imported external-suite outputs.
 
 Exit criteria:
 
@@ -44,18 +48,25 @@ Exit criteria:
 
 ### v0.4.0-pre.0 — Topological analysis expansion
 
+Status: implementation complete; manuscript-scale verification pending.
+
 Exit criteria:
 
 - Add cubical-complex image encoding.
-- Add persistence-diagram export.
-- Add bottleneck or Wasserstein distance comparisons to random baseline.
+- Add GUDHI cubical persistence features.
+- Add distance-to-OS-CSPRNG baseline comparisons.
 - Add effect-size reporting across conditions.
-- Add reproducible figure scripts.
+- Add reproducible stratified figure scripts.
 
 ### v0.5.0-pre.0 — Manuscript evidence package
 
+Status: active.
+
 Exit criteria:
 
+- Run `configs/manuscript_30rep.json` through the manual manuscript-analysis workflow.
+- Confirm `ripser` and `gudhi_cubical` backends are present.
+- Confirm H1 figures are generated only for backend/embedding groups with finite H1 signal.
 - Complete results section from generated tables.
 - Complete discussion with restrained claims.
 - Verify all citations against official pages, DOI records, or publisher pages.
@@ -64,8 +75,8 @@ Exit criteria:
 
 ## Immediate execution order
 
-1. Harden package metadata and tests.
-2. Fix internal monobit test numeric behavior.
-3. Add local smoke-test config for fast runs.
-4. Add issue-tracked work units for Ascon, external randomness tests, TDA expansion, and manuscript evidence.
-5. Run and inspect CI after the next push.
+1. Trigger `Manuscript Analysis` workflow with `configs/manuscript_30rep.json`.
+2. Inspect `tda_backend_summary.csv`, `tda_feature_summary.csv`, and `tda_distance_to_os_csprng.csv`.
+3. Promote only nonzero-signal stratified figures into manuscript candidates.
+4. Add Ascon only after selecting a pinned implementation path.
+5. Draft results from 30-replicate tables, not smoke-test artifacts.
