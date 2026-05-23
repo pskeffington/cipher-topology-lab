@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import re
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -10,14 +11,75 @@ from ciphertopology.distances import distance_to_baseline
 from ciphertopology.utils import ensure_dirs, read_json
 
 
+def slug(value: object) -> str:
+    return re.sub(r"[^A-Za-z0-9_.-]+", "_", str(value)).strip("_")
+
+
 def write_diagnostic_note(path: Path, message: str) -> None:
     path.write_text(message.strip() + "\n", encoding="utf-8")
 
 
-def remove_stale_h1_plot() -> None:
-    stale_plot = Path("results/figures/h1_persistence_entropy_by_condition.png")
-    if stale_plot.exists():
-        stale_plot.unlink()
+def remove_stale_combined_plots() -> None:
+    for stale in [
+        Path("results/figures/h1_persistence_entropy_by_condition.png"),
+        Path("results/figures/h0_persistence_entropy_by_condition.png"),
+        Path("results/figures/tda_distance_to_os_csprng.png"),
+    ]:
+        if stale.exists():
+            stale.unlink()
+
+
+def plot_entropy_by_condition(features: pd.DataFrame, homology_dim: int) -> int:
+    plot_count = 0
+    subset = features[features["homology_dim"] == homology_dim].copy()
+    if subset.empty:
+        return 0
+
+    for (backend, embedding_name), group in subset.groupby(["backend", "embedding_name"]):
+        has_signal = bool(
+            (group["finite_count"].sum() > 0) and (group["persistence_entropy"].abs().sum() > 0)
+        )
+        if not has_signal:
+            continue
+        plt.figure(figsize=(10, 6))
+        group.boxplot(column="persistence_entropy", by="condition", rot=45)
+        plt.title(f"H{homology_dim} Persistence Entropy by Condition: {backend} / {embedding_name}")
+        plt.suptitle("")
+        plt.ylabel("Persistence entropy")
+        plt.tight_layout()
+        out = (
+            Path("results/figures")
+            / f"h{homology_dim}_persistence_entropy__{slug(backend)}__{slug(embedding_name)}.png"
+        )
+        plt.savefig(out, dpi=300)
+        plt.close()
+        plot_count += 1
+    return plot_count
+
+
+def plot_distances_by_condition(distances: pd.DataFrame) -> int:
+    if distances.empty:
+        return 0
+    plot_count = 0
+    for (backend, embedding_name, homology_dim), group in distances.groupby(
+        ["backend", "embedding_name", "homology_dim"]
+    ):
+        plt.figure(figsize=(10, 6))
+        group.boxplot(column="euclidean_feature_distance", by="condition", rot=45)
+        plt.title(
+            f"TDA Feature Distance to OS CSPRNG: {backend} / {embedding_name} / H{homology_dim}"
+        )
+        plt.suptitle("")
+        plt.ylabel("Euclidean feature distance")
+        plt.tight_layout()
+        out = (
+            Path("results/figures")
+            / f"tda_distance_to_os_csprng__{slug(backend)}__{slug(embedding_name)}__h{homology_dim}.png"
+        )
+        plt.savefig(out, dpi=300)
+        plt.close()
+        plot_count += 1
+    return plot_count
 
 
 def main() -> None:
@@ -27,6 +89,7 @@ def main() -> None:
     _ = read_json(args.config)
 
     ensure_dirs("results/figures", "results/tables", "results/logs")
+    remove_stale_combined_plots()
     features = pd.read_csv("data/processed/tda_features.csv")
 
     backend_summary = (
@@ -52,47 +115,25 @@ def main() -> None:
     distances.to_csv("results/tables/tda_distance_to_os_csprng.csv", index=False)
 
     fallback_used = features["backend"].astype(str).str.contains("fallback", case=False).any()
-    h1 = features[features["homology_dim"] == 1].copy()
-    h1_has_signal = bool((h1["finite_count"].sum() > 0) and (h1["persistence_entropy"].abs().sum() > 0))
+    h1_plot_count = plot_entropy_by_condition(features, homology_dim=1)
+    h0_plot_count = plot_entropy_by_condition(features, homology_dim=0)
+    distance_plot_count = plot_distances_by_condition(distances)
 
-    if not fallback_used and h1_has_signal:
-        plt.figure(figsize=(10, 6))
-        h1.boxplot(column="persistence_entropy", by="condition", rot=45)
-        plt.title("H1 Persistence Entropy by Condition")
-        plt.suptitle("")
-        plt.ylabel("Persistence entropy")
-        plt.tight_layout()
-        plt.savefig("results/figures/h1_persistence_entropy_by_condition.png", dpi=300)
-        plt.close()
-    else:
-        remove_stale_h1_plot()
+    if fallback_used:
+        write_diagnostic_note(
+            Path("results/logs/fallback_backend_used.txt"),
+            "A fallback TDA backend was used. Figures from this run are diagnostic only and are not manuscript-grade evidence.",
+        )
+    if h1_plot_count == 0:
         write_diagnostic_note(
             Path("results/logs/h1_plot_skipped.txt"),
-            "H1 persistence-entropy plot skipped because the run used a fallback backend or produced no finite H1 intervals. Manuscript-grade H1 figures require ripser or GUDHI output with finite H1 intervals.",
+            "No stratified H1 persistence-entropy plot was produced because no backend/embedding group had finite H1 signal.",
         )
 
-    h0 = features[features["homology_dim"] == 0].copy()
-    if not h0.empty:
-        plt.figure(figsize=(10, 6))
-        h0.boxplot(column="persistence_entropy", by="condition", rot=45)
-        plt.title("H0 Persistence Entropy by Condition")
-        plt.suptitle("")
-        plt.ylabel("Persistence entropy")
-        plt.tight_layout()
-        plt.savefig("results/figures/h0_persistence_entropy_by_condition.png", dpi=300)
-        plt.close()
-
-    if not distances.empty:
-        plt.figure(figsize=(10, 6))
-        distances.boxplot(column="euclidean_feature_distance", by="condition", rot=45)
-        plt.title("TDA Feature Distance to OS CSPRNG Baseline")
-        plt.suptitle("")
-        plt.ylabel("Euclidean feature distance")
-        plt.tight_layout()
-        plt.savefig("results/figures/tda_distance_to_os_csprng.png", dpi=300)
-        plt.close()
-
-    print("Wrote analysis summaries, backend diagnostics, distances, and eligible figures.")
+    print(
+        "Wrote analysis summaries, backend diagnostics, distances, and stratified figures: "
+        f"H0={h0_plot_count}, H1={h1_plot_count}, distances={distance_plot_count}."
+    )
 
 
 if __name__ == "__main__":
