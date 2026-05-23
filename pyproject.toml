@@ -1,3 +1,7 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "cipher-topology-lab"
 version = "0.1.0"
@@ -18,6 +22,9 @@ dependencies = [
 [project.optional-dependencies]
 tda = ["gudhi>=3.10", "ripser>=0.6", "persim>=0.3"]
 dev = ["pytest>=8.0", "ruff>=0.5"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
 
 [tool.ruff]
 line-length = 100
