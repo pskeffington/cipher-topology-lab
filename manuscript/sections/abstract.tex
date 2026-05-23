@@ -1,0 +1,7 @@
+% ************************************************************
+% ABSTRACT
+% ************************************************************
+
+\begin{abstract}
+This study develops a reproducible computational pipeline for evaluating whether persistent-homology summaries of ciphertext-derived point clouds provide useful auxiliary diagnostics for symmetric-cipher output randomness. The initial design compares AES-128 output, Ascon output, operating-system cryptographic random output, and intentionally weak generator controls. Ciphertext streams are locally generated from documented keys, nonces, plaintext patterns, seeds, and software versions, avoiding dependence on restricted datasets. Byte-pair, sliding-window, and cubical encodings are used to transform byte streams into topological inputs. Persistent-homology features are then compared with conventional randomness diagnostics. The study does not propose a new cryptanalytic attack or claim that topological summaries can certify cryptographic security. Its contribution is a transparent, reproducible framework for testing whether topological data analysis can supplement established statistical diagnostics in cryptographic implementation review.
+\end{abstract}
