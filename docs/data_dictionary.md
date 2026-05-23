@@ -31,6 +31,11 @@
 
 | Field | Meaning |
 |---|---|
+| `backend` | TDA backend used, such as `ripser`, `gudhi_cubical`, or development fallback |
+| `embedding_id` | source embedding identifier |
+| `stream_id` | source stream identifier |
+| `condition` | experimental condition |
+| `embedding_name` | embedding transform |
 | `homology_dim` | homology dimension |
 | `interval_count` | number of persistence intervals |
 | `finite_count` | number of finite intervals |
@@ -38,3 +43,26 @@
 | `lifetime_sd` | standard deviation of finite lifetimes |
 | `lifetime_max` | maximum finite lifetime |
 | `persistence_entropy` | entropy of positive finite lifetimes |
+
+## External randomness-test table
+
+| Field | Meaning |
+|---|---|
+| `source_file` | source result file parsed from an external test suite |
+| `suite` | external test suite, currently `dieharder` for parsed rows |
+| `test_name` | external randomness-test name |
+| `ntup` | Dieharder tuple parameter where reported |
+| `tsamples` | test sample count where reported |
+| `psamples` | p-value sample count where reported |
+| `p_value` | reported p-value |
+| `assessment` | external suite assessment label |
+
+## External export manifest
+
+| Field | Meaning |
+|---|---|
+| `stream_id` | exported source stream identifier |
+| `condition` | experimental condition |
+| `bytes` | exported byte count |
+| `export_path` | path to exported binary file |
+| `sha256` | SHA-256 digest of exported binary file |
