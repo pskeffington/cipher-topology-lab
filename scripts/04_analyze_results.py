@@ -6,6 +6,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import pandas as pd
 
+from ciphertopology.distances import distance_to_baseline
 from ciphertopology.utils import ensure_dirs, read_json
 
 
@@ -47,6 +48,9 @@ def main() -> None:
     )
     summary.to_csv("results/tables/tda_feature_summary.csv", index=False)
 
+    distances = distance_to_baseline(features, baseline_condition="os_csprng")
+    distances.to_csv("results/tables/tda_distance_to_os_csprng.csv", index=False)
+
     fallback_used = features["backend"].astype(str).str.contains("fallback", case=False).any()
     h1 = features[features["homology_dim"] == 1].copy()
     h1_has_signal = bool((h1["finite_count"].sum() > 0) and (h1["persistence_entropy"].abs().sum() > 0))
@@ -78,7 +82,17 @@ def main() -> None:
         plt.savefig("results/figures/h0_persistence_entropy_by_condition.png", dpi=300)
         plt.close()
 
-    print("Wrote analysis summaries, backend diagnostics, and eligible figures.")
+    if not distances.empty:
+        plt.figure(figsize=(10, 6))
+        distances.boxplot(column="euclidean_feature_distance", by="condition", rot=45)
+        plt.title("TDA Feature Distance to OS CSPRNG Baseline")
+        plt.suptitle("")
+        plt.ylabel("Euclidean feature distance")
+        plt.tight_layout()
+        plt.savefig("results/figures/tda_distance_to_os_csprng.png", dpi=300)
+        plt.close()
+
+    print("Wrote analysis summaries, backend diagnostics, distances, and eligible figures.")
 
 
 if __name__ == "__main__":
