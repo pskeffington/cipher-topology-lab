@@ -41,12 +41,7 @@ def _compute_development_fallback_features(
     max_dimension: int,
     max_edge_length: float | None,
 ) -> list[dict[str, Any]]:
-    """Return lightweight development diagnostics when ripser is unavailable.
-
-    This fallback is intended only to keep smoke tests and CI execution paths alive in
-    environments where optional TDA libraries are not installed. It is not a substitute
-    for persistent homology in the manuscript evidence package.
-    """
+    """Return lightweight development diagnostics when ripser is unavailable."""
     threshold = 0.35 if max_edge_length is None else float(max_edge_length)
     if len(points) == 0:
         h0 = np.empty((0, 2), dtype=float)
@@ -99,3 +94,22 @@ def compute_ripser_features(
     result = ripser(points, **kwargs)
     diagrams = result["dgms"]
     return [summarize_diagram(diagram, dim, "ripser") for dim, diagram in enumerate(diagrams)]
+
+
+def compute_cubical_features(image: np.ndarray) -> list[dict[str, Any]]:
+    try:
+        import gudhi as gd
+    except ImportError as exc:
+        raise RuntimeError("gudhi is required for cubical persistence computation.") from exc
+
+    cubical = gd.CubicalComplex(top_dimensional_cells=image.astype(float))
+    cubical.persistence()
+    rows: list[dict[str, Any]] = []
+    for dim in (0, 1):
+        intervals = cubical.persistence_intervals_in_dimension(dim)
+        if intervals.size == 0:
+            diagram = np.empty((0, 2), dtype=float)
+        else:
+            diagram = np.asarray(intervals, dtype=float)
+        rows.append(summarize_diagram(diagram, dim, "gudhi_cubical"))
+    return rows
