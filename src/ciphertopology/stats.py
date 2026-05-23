@@ -12,9 +12,10 @@ def monobit_frequency_test(data: bytes) -> dict[str, float]:
     This is not a replacement for the full NIST SP 800-22 test suite.
     It is included as a lightweight internal diagnostic for early development.
     """
-    arr = np.unpackbits(np.frombuffer(data, dtype=np.uint8))
+    arr = np.unpackbits(np.frombuffer(data, dtype=np.uint8)).astype(np.int8)
     n = arr.size
-    s_obs = abs(np.sum(2 * arr - 1)) / math.sqrt(n)
+    signed_bits = (2 * arr) - 1
+    s_obs = abs(int(np.sum(signed_bits))) / math.sqrt(n)
     p_value = math.erfc(s_obs / math.sqrt(2))
     return {
         "n_bits": float(n),
