@@ -1,0 +1,25 @@
+% ************************************************************
+% METHODS
+% ************************************************************
+
+\section{Methods}
+
+\subsection{Study design}
+
+The study uses a controlled simulation design. All streams are generated locally from documented settings. The primary modern-cipher conditions are AES-128 and Ascon. Operating-system cryptographic random output is used as a random baseline, while LCG and xorshift outputs are used as weak-generator positive controls. DES and TDEA are reserved for a deprecated legacy-control extension and are not treated as modern secure baselines.
+
+\subsection{Stream generation}
+
+For each condition, the pipeline records the algorithm, mode, replicate index, master seed, key material where applicable, nonce or initialization value where applicable, plaintext pattern, stream length, software version, and SHA-256 digest of the generated stream. This manifest-based design permits exact auditing of generated data and derived features.
+
+\subsection{Embedding}
+
+The initial analysis uses two embeddings. The byte-pair embedding maps successive byte pairs to two-dimensional points normalized to the unit square. The sliding-window embedding maps overlapping byte windows to fixed-dimensional vectors. Future extensions will include cubical encodings by reshaping byte streams into grayscale arrays.
+
+\subsection{Topological features}
+
+Persistent-homology features are computed from each embedded point cloud. The initial feature set includes interval counts, finite interval counts, mean finite lifetime, maximum finite lifetime, and persistence entropy for homology dimensions zero and one. These features summarize connected-component and loop structure across filtration scale.
+
+\subsection{Conventional diagnostics}
+
+The repository includes a lightweight internal monobit-frequency diagnostic for development. Full comparison against NIST SP 800-22 and other established batteries is reserved for the next protocol stage, because those suites require explicit external tooling and careful reporting conventions.
