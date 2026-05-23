@@ -1,0 +1,27 @@
+[project]
+name = "cipher-topology-lab"
+version = "0.1.0"
+description = "Topological diagnostics of symmetric-cipher output randomness."
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{name = "Paul A. Skeffington"}]
+dependencies = [
+  "numpy>=1.26",
+  "pandas>=2.0",
+  "scipy>=1.11",
+  "scikit-learn>=1.4",
+  "matplotlib>=3.8",
+  "cryptography>=42.0",
+  "tqdm>=4.66"
+]
+
+[project.optional-dependencies]
+tda = ["gudhi>=3.10", "ripser>=0.6", "persim>=0.3"]
+dev = ["pytest>=8.0", "ruff>=0.5"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
