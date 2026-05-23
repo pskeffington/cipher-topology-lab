@@ -61,9 +61,15 @@ def plot_distances_by_condition(distances: pd.DataFrame) -> int:
     if distances.empty:
         return 0
     plot_count = 0
+    skipped: list[str] = []
     for (backend, embedding_name, homology_dim), group in distances.groupby(
         ["backend", "embedding_name", "homology_dim"]
     ):
+        nonbaseline = group[group["condition"] != group["baseline_condition"]]
+        has_distance_signal = bool(nonbaseline["euclidean_feature_distance"].abs().sum() > 0)
+        if not has_distance_signal:
+            skipped.append(f"{backend} / {embedding_name} / H{homology_dim}")
+            continue
         plt.figure(figsize=(10, 6))
         group.boxplot(column="euclidean_feature_distance", by="condition", rot=45)
         plt.title(
@@ -79,6 +85,11 @@ def plot_distances_by_condition(distances: pd.DataFrame) -> int:
         plt.savefig(out, dpi=300)
         plt.close()
         plot_count += 1
+    if skipped:
+        write_diagnostic_note(
+            Path("results/logs/distance_plots_skipped.txt"),
+            "Skipped distance plots with no nonbaseline distance signal:\n" + "\n".join(skipped),
+        )
     return plot_count
 
 
