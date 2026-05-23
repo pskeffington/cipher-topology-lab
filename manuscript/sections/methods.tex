@@ -14,12 +14,12 @@ For each condition, the pipeline records the algorithm, mode, replicate index, m
 
 \subsection{Embedding}
 
-The initial analysis uses two embeddings. The byte-pair embedding maps successive byte pairs to two-dimensional points normalized to the unit square. The sliding-window embedding maps overlapping byte windows to fixed-dimensional vectors. Future extensions will include cubical encodings by reshaping byte streams into grayscale arrays.
+The initial analysis uses two embeddings. The byte-pair embedding maps successive byte pairs to two-dimensional points normalized to the unit square. The sliding-window embedding maps overlapping byte windows to fixed-dimensional vectors. Cubical encodings are treated as a planned extension in the current roadmap and will reshape byte streams into grayscale arrays before cubical persistence is computed.
 
 \subsection{Topological features}
 
-Persistent-homology features are computed from each embedded point cloud. The initial feature set includes interval counts, finite interval counts, mean finite lifetime, maximum finite lifetime, and persistence entropy for homology dimensions zero and one. These features summarize connected-component and loop structure across filtration scale.
+Persistent-homology features are computed from each embedded point cloud. The initial feature set includes interval counts, finite interval counts, mean finite lifetime, maximum finite lifetime, and persistence entropy for homology dimensions zero and one. These features summarize connected-component and loop structure across filtration scale. Manuscript-grade results require a true persistent-homology backend such as ripser or GUDHI; development fallback outputs are restricted to smoke testing and are not used for publication claims.
 
 \subsection{Conventional diagnostics}
 
-The repository includes a lightweight internal monobit-frequency diagnostic for development. Full comparison against NIST SP 800-22 and other established batteries is reserved for the next protocol stage, because those suites require explicit external tooling and careful reporting conventions.
+The repository includes a lightweight internal monobit-frequency diagnostic for development. External randomness-test integration exports generated streams into binary files with SHA-256 digests and provides parsing support for Dieharder-style result tables. NIST SP 800-22 and Dieharder outputs are treated as conventional statistical diagnostics and are compared with topological summaries rather than interpreted as proof of cipher security.
