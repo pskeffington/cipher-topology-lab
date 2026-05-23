@@ -1,0 +1,17 @@
+% ************************************************************
+% BACKGROUND
+% ************************************************************
+
+\section{Background}
+
+\subsection{Symmetric-cipher output and randomness diagnostics}
+
+AES is specified in FIPS 197 as AES-128, AES-192, and AES-256, each using a 128-bit block size and key lengths corresponding to the numerical suffix. Randomness testing is often used as a preliminary diagnostic for cryptographic outputs, but statistical testing cannot substitute for cryptanalysis. This distinction is central to the design of the present study. The tests and topological summaries considered here are diagnostic instruments, not security proofs.
+
+\subsection{Ascon and lightweight cryptography}
+
+Ascon provides a modern lightweight-cryptography comparison point because it was selected by NIST for constrained devices and standardized for authenticated encryption, hash, and extendable-output functions. Its inclusion broadens the study beyond AES while keeping the analysis focused on current symmetric cryptography.
+
+\subsection{Persistent homology}
+
+Persistent homology studies how topological features such as connected components and holes are born, persist, and die across a filtration. In the present study, byte streams are converted to point clouds or cubical-complex inputs, and persistent-homology features are computed from those representations. The resulting features are interpreted as empirical diagnostics of structure in the transformed output stream.
