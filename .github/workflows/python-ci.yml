@@ -1,20 +1,61 @@
-name: Python CI
+name: Python CI and Smoke Workflow
 
 on:
   push:
   pull_request:
+  workflow_dispatch:
 
 jobs:
-  test:
+  validate:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+
       - name: Install package
         run: python -m pip install -e ".[dev]"
-      - name: Run tests
+
+      - name: Run unit tests
         run: pytest -q
-      - name: Lint
+
+      - name: Run lint checks
         run: ruff check src scripts tests
+
+      - name: Generate smoke streams
+        run: python scripts/00_generate_streams.py --config configs/smoke_test.json
+
+      - name: Build smoke embeddings
+        run: python scripts/01_embed_ciphertext.py --config configs/smoke_test.json
+
+      - name: Compute smoke TDA features
+        run: python scripts/02_compute_tda_features.py --config configs/smoke_test.json
+
+      - name: Run internal randomness diagnostics
+        run: python scripts/03_randomness_tests.py --config configs/smoke_test.json
+
+      - name: Analyze smoke outputs
+        run: python scripts/04_analyze_results.py --config configs/smoke_test.json
+
+      - name: Export external randomness-test inputs
+        run: python scripts/05_export_randomness_inputs.py --manifest data/raw/stream_manifest.csv
+
+      - name: Parse external randomness-test outputs
+        run: python scripts/06_parse_external_results.py
+
+      - name: Upload generated tables and figures
+        uses: actions/upload-artifact@v4
+        with:
+          name: smoke-results
+          path: |
+            data/raw/stream_manifest.csv
+            data/interim/embedding_manifest.csv
+            data/processed/*.csv
+            results/tables/*.csv
+            results/figures/*
+            external_tests/inputs/export_manifest.csv
