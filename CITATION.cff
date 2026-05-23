@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use this repository, please cite it as follows."
+title: "cipher-topology-lab: Topological Diagnostics of Symmetric-Cipher Output Randomness"
+authors:
+  - family-names: "Skeffington"
+    given-names: "Paul A."
+version: "0.1.0-pre.0"
+date-released: "2026-05-23"
+license: "MIT"
+repository-code: "https://github.com/pskeffington/cipher-topology-lab"
+keywords:
+  - cryptography
+  - AES
+  - Ascon
+  - persistent homology
+  - topological data analysis
+  - randomness testing
