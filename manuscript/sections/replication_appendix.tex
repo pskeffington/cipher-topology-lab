@@ -1,0 +1,22 @@
+% ************************************************************
+% REPLICATION APPENDIX
+% ************************************************************
+
+\appendix
+\section{Replication Appendix}
+
+\subsection{Repository and workflow}
+
+The manuscript evidence package is generated from the public repository workflow using the manual \texttt{Manuscript Analysis} GitHub Actions workflow. The target configuration for manuscript-scale analysis is \texttt{configs/manuscript\_30rep.json}. Smoke-test outputs are used only for engineering validation and are not treated as manuscript evidence.
+
+\subsection{Eligibility criteria for manuscript evidence}
+
+A run is eligible for manuscript evidence only if the generated backend summary confirms that the persistent-homology backends are \texttt{ripser} and \texttt{gudhi\_cubical}. Any run containing \texttt{fallback\_threshold\_graph} is excluded from manuscript claims. H1 figures are eligible only when the corresponding backend and embedding produce finite H1 intervals. Distance-to-baseline figures are eligible only when nonbaseline conditions have nonzero distance from the operating-system cryptographic-random baseline.
+
+\subsection{Required artifacts}
+
+The replication package requires stream manifests, embedding manifests, backend summaries, topological feature summaries, distance-to-baseline tables, internal randomness diagnostics, and imported external randomness-test outputs where available. The external randomness-test table may be schema-only until Dieharder, NIST SP 800-22, or another external suite has been run and imported.
+
+\subsection{Interpretive limits}
+
+The analysis is a diagnostic comparison of topological and statistical summaries under controlled stream-generation conditions. It does not constitute a cryptanalytic attack, a proof of cipher security, or a replacement for formal analysis of AES, Ascon, or any other cryptographic primitive.
