@@ -1,20 +1,33 @@
-.PHONY: setup data embed features analysis manuscript clean test
+.PHONY: setup setup-smoke data embed features analysis manuscript clean test smoke
+
+CONFIG ?= configs/experiment_v0.json
+SMOKE_CONFIG ?= configs/smoke_test.json
 
 setup:
 	python -m pip install -e ".[dev,tda]"
 
+setup-smoke:
+	python -m pip install -e ".[dev]"
+
 data:
-	python scripts/00_generate_streams.py --config configs/experiment_v0.json
+	python scripts/00_generate_streams.py --config $(CONFIG)
 
 embed:
-	python scripts/01_embed_ciphertext.py --config configs/experiment_v0.json
+	python scripts/01_embed_ciphertext.py --config $(CONFIG)
 
 features:
-	python scripts/02_compute_tda_features.py --config configs/experiment_v0.json
+	python scripts/02_compute_tda_features.py --config $(CONFIG)
 
 analysis:
-	python scripts/03_randomness_tests.py --config configs/experiment_v0.json
-	python scripts/04_analyze_results.py --config configs/experiment_v0.json
+	python scripts/03_randomness_tests.py --config $(CONFIG)
+	python scripts/04_analyze_results.py --config $(CONFIG)
+
+smoke:
+	python scripts/00_generate_streams.py --config $(SMOKE_CONFIG)
+	python scripts/01_embed_ciphertext.py --config $(SMOKE_CONFIG)
+	python scripts/02_compute_tda_features.py --config $(SMOKE_CONFIG)
+	python scripts/03_randomness_tests.py --config $(SMOKE_CONFIG)
+	python scripts/04_analyze_results.py --config $(SMOKE_CONFIG)
 
 manuscript:
 	cd manuscript && latexmk -pdf main.tex
