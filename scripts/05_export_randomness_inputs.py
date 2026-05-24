@@ -14,10 +14,17 @@ def write_dieharder_script(out_dir: Path) -> None:
     script.write_text(
         "#!/usr/bin/env bash\n"
         "set -euo pipefail\n\n"
-        "mkdir -p ../results/dieharder\n"
-        "for f in *.bin; do\n"
-        "  base=${f%.bin}\n"
-        "  dieharder -a -g 201 -f \"$f\" > \"../results/dieharder/${base}.txt\"\n"
+        "SCRIPT_DIR=$(cd -- \"$(dirname -- \"${BASH_SOURCE[0]}\")\" && pwd)\n"
+        "RESULT_DIR=\"${SCRIPT_DIR}/../results/dieharder\"\n"
+        "mkdir -p \"${RESULT_DIR}\"\n\n"
+        "if ! command -v dieharder >/dev/null 2>&1; then\n"
+        "  echo \"ERROR: dieharder executable not found on PATH.\" >&2\n"
+        "  exit 127\n"
+        "fi\n\n"
+        "for f in \"${SCRIPT_DIR}\"/*.bin; do\n"
+        "  [ -e \"${f}\" ] || continue\n"
+        "  base=$(basename \"${f%.bin}\")\n"
+        "  dieharder -a -g 201 -f \"${f}\" > \"${RESULT_DIR}/${base}.txt\"\n"
         "done\n",
         encoding="utf-8",
     )
