@@ -44,6 +44,18 @@
 | `lifetime_max` | maximum finite lifetime |
 | `persistence_entropy` | entropy of positive finite lifetimes |
 
+## TDA distance-to-baseline table
+
+| Field | Meaning |
+|---|---|
+| `stream_id` | source stream identifier for stream-level distance row |
+| `condition` | experimental condition |
+| `baseline_condition` | reference condition used to compute centroid, usually `os_csprng` |
+| `backend` | TDA backend |
+| `embedding_name` | embedding transform |
+| `homology_dim` | homology dimension |
+| `euclidean_feature_distance` | Euclidean distance between the stream feature vector and the baseline-condition centroid within the same backend, embedding, and homology dimension |
+
 ## External randomness-test table
 
 | Field | Meaning |
