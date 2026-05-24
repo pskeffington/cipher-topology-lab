@@ -1,0 +1,62 @@
+name: External randomness battery
+
+on:
+  workflow_dispatch:
+
+jobs:
+  external-randomness:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install system randomness suite
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y dieharder
+
+      - name: Install Python package
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e '.[dev,tda]'
+
+      - name: Generate project artifacts
+        run: |
+          python scripts/00_generate_streams.py --config configs/experiment_v0.json
+          python scripts/01_embed_ciphertext.py --config configs/experiment_v0.json
+          python scripts/02_compute_tda_features.py --config configs/experiment_v0.json
+          python scripts/03_randomness_tests.py --config configs/experiment_v0.json
+          python scripts/04_analyze_results.py --config configs/experiment_v0.json
+          python scripts/05_export_randomness_inputs.py --manifest data/raw/stream_manifest.csv
+
+      - name: Run external randomness battery
+        run: |
+          bash external_tests/inputs/run_dieharder.sh
+
+      - name: Parse external randomness results
+        run: |
+          python scripts/06_parse_external_results.py \
+            --dieharder-dir external_tests/results/dieharder \
+            --out data/processed/external_randomness_tests.csv
+          test $(wc -l < data/processed/external_randomness_tests.csv) -gt 1
+
+      - name: Validate and build evidence register
+        run: |
+          python scripts/08_validate_artifact_coherence.py --config configs/experiment_v0.json
+          python scripts/09_build_evidence_register.py --config configs/experiment_v0.json --output docs/evidence_register.md
+
+      - name: Upload external randomness artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: external-randomness-artifacts
+          path: |
+            data/processed/external_randomness_tests.csv
+            docs/evidence_register.md
+            external_tests/results/dieharder/*.txt
+            results/tables/*.csv
+            results/logs/*
