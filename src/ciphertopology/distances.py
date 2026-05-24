@@ -17,15 +17,34 @@ def distance_to_baseline(
     features: pd.DataFrame,
     baseline_condition: str = "os_csprng",
 ) -> pd.DataFrame:
-    grouped = (
-        features.groupby(["condition", "backend", "embedding_name", "homology_dim"], as_index=False)[
-            DISTANCE_FEATURES
-        ]
+    """Compute stream-level distance to the baseline centroid.
+
+    Distances are computed within each backend, embedding, and homology dimension.
+    The baseline centroid is the mean feature vector among streams whose condition
+    equals `baseline_condition`. Each stream is then compared with that centroid.
+    This yields replicate-level distance distributions rather than one aggregate
+    distance per condition.
+    """
+    required = {
+        "stream_id",
+        "condition",
+        "backend",
+        "embedding_name",
+        "homology_dim",
+        *DISTANCE_FEATURES,
+    }
+    missing = required - set(features.columns)
+    if missing:
+        raise ValueError(f"Missing required distance feature columns: {sorted(missing)}")
+
+    baseline = (
+        features[features["condition"] == baseline_condition]
+        .groupby(["backend", "embedding_name", "homology_dim"], as_index=False)[DISTANCE_FEATURES]
         .mean()
     )
-    baseline = grouped[grouped["condition"] == baseline_condition].copy()
+
     rows = []
-    for _, row in grouped.iterrows():
+    for _, row in features.iterrows():
         match = baseline[
             (baseline["backend"] == row["backend"])
             & (baseline["embedding_name"] == row["embedding_name"])
@@ -39,6 +58,7 @@ def distance_to_baseline(
             squared_sum += float(row[feature] - base[feature]) ** 2
         rows.append(
             {
+                "stream_id": row["stream_id"],
                 "condition": row["condition"],
                 "baseline_condition": baseline_condition,
                 "backend": row["backend"],
