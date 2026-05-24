@@ -24,17 +24,18 @@ A reproducible pipeline that:
 
 | Class | Role |
 |---|---|
-| AES-128 | Primary modern block-cipher baseline |
-| Ascon | Lightweight-cryptography comparison |
-| OS CSPRNG | Random baseline |
+| AES-128 CTR | Primary modern block-cipher stream baseline |
+| SHA-256 expansion | Deterministic reproducibility baseline |
+| OS CSPRNG | Non-deterministic sensitivity baseline |
 | LCG / xorshift | Weak-generator positive controls |
-| DES / TDEA | Deprecated legacy comparator only |
+| Ascon | Planned lightweight-cryptography comparison |
+| DES / TDEA | Planned deprecated legacy comparator only |
 
 DES and TDEA are not treated as modern security targets.
 
 ## Why this project is data-accessible
 
-No restricted datasets are required. The complete dataset is generated locally from documented seeds, keys, nonces, plaintext patterns, and generator settings.
+No restricted datasets are required. The complete primary dataset is generated locally from documented seeds, keys, CTR initial values, plaintext patterns, and generator settings. The OS CSPRNG condition is retained as a non-deterministic sensitivity condition, not as the primary reproducibility baseline.
 
 ## Repository structure
 
@@ -61,7 +62,10 @@ cipher-topology-lab/
 │   ├── 01_embed_ciphertext.py
 │   ├── 02_compute_tda_features.py
 │   ├── 03_randomness_tests.py
-│   └── 04_analyze_results.py
+│   ├── 04_analyze_results.py
+│   ├── 05_export_randomness_inputs.py
+│   ├── 06_parse_external_results.py
+│   └── 07_validate_tda_backend.py
 ├── src/
 │   └── ciphertopology/
 ├── tests/
@@ -77,9 +81,17 @@ cipher-topology-lab/
 ```bash
 make setup
 make data
+make embed
 make features
 make analysis
 make manuscript
+```
+
+## Smoke workflow
+
+```bash
+make setup
+make smoke
 ```
 
 ## Initial publication frame
@@ -88,4 +100,4 @@ This project is suitable for an applied cryptography, cybersecurity engineering,
 
 ## Status
 
-`v0.1.0-pre.0`: repository scaffold and pre-analysis protocol.
+`v0.4.1-pre.0`: execution-repair pre-release with deterministic baseline, corrected AES-CTR metadata language, stratified TDA outputs, and standardized distance metrics.
