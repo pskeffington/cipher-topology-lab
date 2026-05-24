@@ -57,11 +57,12 @@ def plot_entropy_by_condition(features: pd.DataFrame, homology_dim: int) -> int:
     return plot_count
 
 
-def plot_distances_by_condition(distances: pd.DataFrame) -> int:
+def plot_distances_by_condition(distances: pd.DataFrame, baseline_condition: str) -> int:
     if distances.empty:
         return 0
     plot_count = 0
     skipped: list[str] = []
+    baseline_slug = slug(baseline_condition)
     for (backend, embedding_name, homology_dim), group in distances.groupby(
         ["backend", "embedding_name", "homology_dim"]
     ):
@@ -73,14 +74,15 @@ def plot_distances_by_condition(distances: pd.DataFrame) -> int:
         plt.figure(figsize=(10, 6))
         group.boxplot(column="euclidean_feature_distance", by="condition", rot=45)
         plt.title(
-            f"TDA Feature Distance to OS CSPRNG: {backend} / {embedding_name} / H{homology_dim}"
+            f"TDA Feature Distance to {baseline_condition}: "
+            f"{backend} / {embedding_name} / H{homology_dim}"
         )
         plt.suptitle("")
         plt.ylabel("Euclidean feature distance")
         plt.tight_layout()
         out = (
             Path("results/figures")
-            / f"tda_distance_to_os_csprng__{slug(backend)}__{slug(embedding_name)}__h{homology_dim}.png"
+            / f"tda_distance_to_{baseline_slug}__{slug(backend)}__{slug(embedding_name)}__h{homology_dim}.png"
         )
         plt.savefig(out, dpi=300)
         plt.close()
@@ -97,7 +99,9 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", required=True)
     args = parser.parse_args()
-    _ = read_json(args.config)
+    config = read_json(args.config)
+    baseline_condition = config.get("baseline_condition", "os_csprng")
+    baseline_slug = slug(baseline_condition)
 
     ensure_dirs("results/figures", "results/tables", "results/logs")
     remove_stale_combined_plots()
@@ -122,13 +126,15 @@ def main() -> None:
     )
     summary.to_csv("results/tables/tda_feature_summary.csv", index=False)
 
-    distances = distance_to_baseline(features, baseline_condition="os_csprng")
-    distances.to_csv("results/tables/tda_distance_to_os_csprng.csv", index=False)
+    distances = distance_to_baseline(features, baseline_condition=baseline_condition)
+    distances.to_csv(f"results/tables/tda_distance_to_{baseline_slug}.csv", index=False)
+    if baseline_condition == "os_csprng":
+        distances.to_csv("results/tables/tda_distance_to_os_csprng.csv", index=False)
 
     fallback_used = features["backend"].astype(str).str.contains("fallback", case=False).any()
     h1_plot_count = plot_entropy_by_condition(features, homology_dim=1)
     h0_plot_count = plot_entropy_by_condition(features, homology_dim=0)
-    distance_plot_count = plot_distances_by_condition(distances)
+    distance_plot_count = plot_distances_by_condition(distances, baseline_condition)
 
     if fallback_used:
         write_diagnostic_note(
@@ -143,7 +149,8 @@ def main() -> None:
 
     print(
         "Wrote analysis summaries, backend diagnostics, distances, and stratified figures: "
-        f"H0={h0_plot_count}, H1={h1_plot_count}, distances={distance_plot_count}."
+        f"baseline={baseline_condition}, H0={h0_plot_count}, H1={h1_plot_count}, "
+        f"distances={distance_plot_count}."
     )
 
 
