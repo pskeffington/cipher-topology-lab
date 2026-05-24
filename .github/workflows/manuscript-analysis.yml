@@ -51,6 +51,9 @@ jobs:
       - name: Analyze outputs
         run: python scripts/04_analyze_results.py --config ${{ github.event.inputs.config }}
 
+      - name: Validate artifact consistency
+        run: python scripts/09_validate_artifact_consistency.py
+
       - name: Export external randomness-test inputs
         run: python scripts/05_export_randomness_inputs.py --manifest data/raw/stream_manifest.csv
 
