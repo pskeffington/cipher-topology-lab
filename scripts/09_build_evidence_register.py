@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import subprocess
+import sys
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -35,7 +36,7 @@ def csv_columns(path: Path) -> list[str]:
 
 def validation_status(config_path: str) -> tuple[str, str]:
     command = [
-        "python",
+        sys.executable,
         "scripts/08_validate_artifact_coherence.py",
         "--config",
         config_path,
@@ -120,7 +121,7 @@ Generated: `{generated_at}`
 
 ## Validation
 
-- Command: `python scripts/08_validate_artifact_coherence.py --config {config_path}`
+- Command: `{sys.executable} scripts/08_validate_artifact_coherence.py --config {config_path}`
 - Status: `{validation_result}`
 
 ```text
