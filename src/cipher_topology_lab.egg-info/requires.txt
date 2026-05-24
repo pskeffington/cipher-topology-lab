@@ -1,0 +1,16 @@
+numpy>=1.26
+pandas>=2.0
+scipy>=1.11
+scikit-learn>=1.4
+matplotlib>=3.8
+cryptography>=42.0
+tqdm>=4.66
+
+[dev]
+pytest>=8.0
+ruff>=0.5
+
+[tda]
+gudhi>=3.10
+ripser>=0.6
+persim>=0.3

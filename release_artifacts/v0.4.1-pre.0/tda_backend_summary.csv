@@ -1,0 +1,5 @@
+backend,embedding_name,homology_dim,row_count
+ripser,byte_pair_2d,0,48
+ripser,byte_pair_2d,1,48
+ripser,sliding_window_8d,0,48
+ripser,sliding_window_8d,1,48
