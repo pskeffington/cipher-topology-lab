@@ -4,6 +4,7 @@
   "master_seed": 20260523,
   "stream_bytes": 1048576,
   "replicates": 8,
+  "baseline_condition": "sha256_seeded_baseline",
   "conditions": [
     "aes128_ctr_xor_deterministic_plaintext",
     "aes128_ctr_keystream_zero_plaintext",
