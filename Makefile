@@ -1,4 +1,4 @@
-.PHONY: setup setup-smoke data embed features analysis export-randomness manuscript clean clean-generated test smoke
+.PHONY: setup setup-smoke data embed features analysis export-randomness evidence-register manuscript clean clean-generated test smoke
 
 CONFIG ?= configs/experiment_v0.json
 SMOKE_CONFIG ?= configs/smoke_test.json
@@ -30,6 +30,9 @@ analysis:
 export-randomness:
 	$(PYTHON) scripts/05_export_randomness_inputs.py --manifest data/raw/stream_manifest.csv
 
+evidence-register:
+	$(PYTHON) scripts/09_build_evidence_register.py --config $(CONFIG) --output docs/evidence_register.md
+
 clean-generated:
 	rm -rf data/raw/* data/interim/* data/processed/* results/figures/* results/tables/* results/logs/* external_tests/inputs/* external_tests/results/*
 
@@ -41,6 +44,7 @@ smoke: clean-generated
 	$(PYTHON) scripts/04_analyze_results.py --config $(SMOKE_CONFIG)
 	$(PYTHON) scripts/05_export_randomness_inputs.py --manifest data/raw/stream_manifest.csv
 	$(PYTHON) scripts/08_validate_artifact_coherence.py --config $(SMOKE_CONFIG)
+	$(PYTHON) scripts/09_build_evidence_register.py --config $(SMOKE_CONFIG) --output docs/evidence_register.md
 
 manuscript:
 	cd manuscript && latexmk -pdf main.tex
