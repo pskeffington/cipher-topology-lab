@@ -1,12 +1,13 @@
 {
   "project": "cipher-topology-lab",
-  "version": "0.1.0-pre.0-smoke",
+  "version": "0.4.1-pre.0-smoke",
   "master_seed": 20260523,
   "stream_bytes": 4096,
   "replicates": 2,
   "conditions": [
-    "aes128_ctr_random_plaintext",
-    "aes128_ctr_zero_plaintext",
+    "aes128_ctr_xor_deterministic_plaintext",
+    "aes128_ctr_keystream_zero_plaintext",
+    "sha256_seeded_baseline",
     "os_csprng",
     "lcg_weak",
     "xorshift32_weak"
