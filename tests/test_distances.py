@@ -3,10 +3,11 @@ import pandas as pd
 from ciphertopology.distances import distance_to_baseline
 
 
-def test_distance_to_baseline_returns_control_distance():
+def test_distance_to_baseline_returns_stream_level_distances():
     features = pd.DataFrame(
         [
             {
+                "stream_id": "os_001",
                 "condition": "os_csprng",
                 "backend": "ripser",
                 "embedding_name": "byte_pair_2d",
@@ -19,6 +20,7 @@ def test_distance_to_baseline_returns_control_distance():
                 "persistence_entropy": 0.0,
             },
             {
+                "stream_id": "weak_001",
                 "condition": "lcg_weak",
                 "backend": "ripser",
                 "embedding_name": "byte_pair_2d",
@@ -33,6 +35,8 @@ def test_distance_to_baseline_returns_control_distance():
         ]
     )
     distances = distance_to_baseline(features)
+    assert "stream_id" in distances.columns
+    assert len(distances) == 2
     control_distance = distances.loc[
         distances["condition"] == "os_csprng", "euclidean_feature_distance"
     ].iloc[0]
