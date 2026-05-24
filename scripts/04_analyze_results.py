@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import re
+import textwrap
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -13,6 +14,20 @@ from ciphertopology.utils import ensure_dirs, read_json
 
 def slug(value: object) -> str:
     return re.sub(r"[^A-Za-z0-9_.-]+", "_", str(value)).strip("_")
+
+
+def label_condition(value: object) -> str:
+    labels = {
+        "aes128_ctr_xor_deterministic_plaintext": "AES-CTR\ndeterministic PT",
+        "aes128_ctr_keystream_zero_plaintext": "AES-CTR\nzero PT",
+        "sha256_seeded_baseline": "SHA-256\nseeded baseline",
+        "os_csprng": "OS\nCSPRNG",
+        "lcg_weak": "LCG\nweak",
+        "xorshift32_weak": "xorshift32\nweak",
+        "aes128_ctr_random_plaintext": "AES-CTR\nlegacy random PT",
+        "aes128_ctr_zero_plaintext": "AES-CTR\nlegacy zero PT",
+    }
+    return labels.get(str(value), "\n".join(textwrap.wrap(str(value), width=16)))
 
 
 def write_diagnostic_note(path: Path, message: str) -> None:
@@ -29,6 +44,25 @@ def remove_stale_combined_plots() -> None:
             stale.unlink()
 
 
+def save_boxplot(
+    data: pd.DataFrame,
+    value_column: str,
+    title: str,
+    ylabel: str,
+    out_path: Path,
+) -> None:
+    plot_data = data.copy()
+    plot_data["condition_label"] = plot_data["condition"].map(label_condition)
+    ax = plot_data.boxplot(column=value_column, by="condition_label", rot=0, figsize=(12, 7))
+    ax.set_title(title, fontsize=12)
+    ax.set_xlabel("Condition")
+    ax.set_ylabel(ylabel)
+    plt.suptitle("")
+    plt.tight_layout()
+    plt.savefig(out_path, dpi=300, bbox_inches="tight")
+    plt.close()
+
+
 def plot_entropy_by_condition(features: pd.DataFrame, homology_dim: int) -> int:
     plot_count = 0
     subset = features[features["homology_dim"] == homology_dim].copy()
@@ -41,18 +75,17 @@ def plot_entropy_by_condition(features: pd.DataFrame, homology_dim: int) -> int:
         )
         if not has_signal:
             continue
-        plt.figure(figsize=(10, 6))
-        group.boxplot(column="persistence_entropy", by="condition", rot=45)
-        plt.title(f"H{homology_dim} Persistence Entropy by Condition: {backend} / {embedding_name}")
-        plt.suptitle("")
-        plt.ylabel("Persistence entropy")
-        plt.tight_layout()
         out = (
             Path("results/figures")
             / f"h{homology_dim}_persistence_entropy__{slug(backend)}__{slug(embedding_name)}.png"
         )
-        plt.savefig(out, dpi=300)
-        plt.close()
+        save_boxplot(
+            group,
+            "persistence_entropy",
+            f"H{homology_dim} Persistence Entropy: {backend} / {embedding_name}",
+            "Persistence entropy",
+            out,
+        )
         plot_count += 1
     return plot_count
 
@@ -63,6 +96,10 @@ def plot_distances_by_condition(distances: pd.DataFrame, baseline_condition: str
     plot_count = 0
     skipped: list[str] = []
     baseline_slug = slug(baseline_condition)
+    distance_specs = [
+        ("euclidean_feature_distance", "Raw Euclidean feature distance", "raw"),
+        ("z_scored_euclidean_feature_distance", "Z-scored Euclidean feature distance", "zscored"),
+    ]
     for (backend, embedding_name, homology_dim), group in distances.groupby(
         ["backend", "embedding_name", "homology_dim"]
     ):
@@ -71,22 +108,21 @@ def plot_distances_by_condition(distances: pd.DataFrame, baseline_condition: str
         if not has_distance_signal:
             skipped.append(f"{backend} / {embedding_name} / H{homology_dim}")
             continue
-        plt.figure(figsize=(10, 6))
-        group.boxplot(column="euclidean_feature_distance", by="condition", rot=45)
-        plt.title(
-            f"TDA Feature Distance to {baseline_condition}: "
-            f"{backend} / {embedding_name} / H{homology_dim}"
-        )
-        plt.suptitle("")
-        plt.ylabel("Euclidean feature distance")
-        plt.tight_layout()
-        out = (
-            Path("results/figures")
-            / f"tda_distance_to_{baseline_slug}__{slug(backend)}__{slug(embedding_name)}__h{homology_dim}.png"
-        )
-        plt.savefig(out, dpi=300)
-        plt.close()
-        plot_count += 1
+        for column, ylabel, suffix in distance_specs:
+            if column not in group.columns:
+                continue
+            out = (
+                Path("results/figures")
+                / f"tda_distance_to_{baseline_slug}__{slug(backend)}__{slug(embedding_name)}__h{homology_dim}__{suffix}.png"
+            )
+            save_boxplot(
+                group,
+                column,
+                f"TDA Distance to {baseline_condition}: {backend} / {embedding_name} / H{homology_dim}",
+                ylabel,
+                out,
+            )
+            plot_count += 1
     if skipped:
         write_diagnostic_note(
             Path("results/logs/distance_plots_skipped.txt"),
