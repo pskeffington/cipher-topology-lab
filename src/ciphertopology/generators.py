@@ -19,8 +19,9 @@ class StreamSpec:
 def deterministic_bytes(label: str, n: int) -> bytes:
     """Generate deterministic bytes from repeated SHA-256 expansion.
 
-    This is used for reproducible keys, nonces, and structured control inputs.
-    It is not used as a claim of cryptographic randomness.
+    This is used for reproducible keys, initial counter blocks, structured inputs,
+    and deterministic baseline streams. It is not used as a claim of cryptographic
+    randomness.
     """
     out = bytearray()
     counter = 0
@@ -33,21 +34,30 @@ def deterministic_bytes(label: str, n: int) -> bytes:
 
 def aes128_ctr_stream(spec: StreamSpec, plaintext: bytes) -> tuple[bytes, dict[str, str]]:
     key = deterministic_bytes(f"aes-key:{spec.master_seed}:{spec.replicate}", 16)
-    nonce = deterministic_bytes(f"aes-nonce:{spec.master_seed}:{spec.replicate}", 16)
-    cipher = Cipher(algorithms.AES(key), modes.CTR(nonce))
+    ctr_initial_value = deterministic_bytes(
+        f"aes-ctr-initial-value:{spec.master_seed}:{spec.replicate}", 16
+    )
+    cipher = Cipher(algorithms.AES(key), modes.CTR(ctr_initial_value))
     encryptor = cipher.encryptor()
     ciphertext = encryptor.update(plaintext) + encryptor.finalize()
     meta = {
         "algorithm": "AES-128",
         "mode": "CTR",
         "key_hex": key.hex(),
-        "nonce_hex": nonce.hex(),
+        "ctr_initial_value_hex": ctr_initial_value.hex(),
     }
     return ciphertext, meta
 
 
+def sha256_seeded_baseline_stream(spec: StreamSpec) -> tuple[bytes, dict[str, str]]:
+    stream = deterministic_bytes(
+        f"sha256-seeded-baseline:{spec.master_seed}:{spec.replicate}", spec.n_bytes
+    )
+    return stream, {"algorithm": "SHA256-expansion", "mode": "deterministic-baseline"}
+
+
 def os_csprng_stream(spec: StreamSpec) -> tuple[bytes, dict[str, str]]:
-    return os.urandom(spec.n_bytes), {"algorithm": "OS-CSPRNG", "mode": "raw"}
+    return os.urandom(spec.n_bytes), {"algorithm": "OS-CSPRNG", "mode": "raw-nondeterministic"}
 
 
 def lcg_stream(spec: StreamSpec) -> tuple[bytes, dict[str, str]]:
@@ -82,17 +92,28 @@ def xorshift32_stream(spec: StreamSpec) -> tuple[bytes, dict[str, str]]:
 
 
 def generate_stream(spec: StreamSpec) -> tuple[bytes, dict[str, str]]:
-    if spec.condition == "aes128_ctr_random_plaintext":
+    if spec.condition in {
+        "aes128_ctr_random_plaintext",
+        "aes128_ctr_xor_deterministic_plaintext",
+    }:
         rng = random.Random(f"{spec.master_seed}:{spec.replicate}:plaintext")
         plaintext = bytes(rng.randrange(0, 256) for _ in range(spec.n_bytes))
         stream, meta = aes128_ctr_stream(spec, plaintext)
         meta["plaintext_pattern"] = "deterministic_random"
         return stream, meta
 
-    if spec.condition == "aes128_ctr_zero_plaintext":
+    if spec.condition in {
+        "aes128_ctr_zero_plaintext",
+        "aes128_ctr_keystream_zero_plaintext",
+    }:
         plaintext = bytes(spec.n_bytes)
         stream, meta = aes128_ctr_stream(spec, plaintext)
         meta["plaintext_pattern"] = "zero"
+        return stream, meta
+
+    if spec.condition == "sha256_seeded_baseline":
+        stream, meta = sha256_seeded_baseline_stream(spec)
+        meta["plaintext_pattern"] = "n/a"
         return stream, meta
 
     if spec.condition == "os_csprng":
