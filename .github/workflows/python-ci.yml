@@ -27,6 +27,9 @@ jobs:
       - name: Run lint checks
         run: ruff check src scripts tests
 
+      - name: Remove stale generated artifacts
+        run: make clean-generated
+
       - name: Generate smoke streams
         run: python scripts/00_generate_streams.py --config configs/cubical_smoke_test.json
 
@@ -50,6 +53,9 @@ jobs:
 
       - name: Parse external randomness-test outputs
         run: python scripts/06_parse_external_results.py
+
+      - name: Validate artifact coherence
+        run: python scripts/08_validate_artifact_coherence.py --config configs/cubical_smoke_test.json
 
       - name: Upload generated diagnostic artifacts
         uses: actions/upload-artifact@v4
