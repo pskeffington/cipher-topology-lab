@@ -60,6 +60,9 @@ jobs:
       - name: Validate artifact consistency
         run: python scripts/09_validate_artifact_consistency.py
 
+      - name: Build effect-size tables
+        run: python scripts/10_effect_size_tables.py
+
       - name: Upload manuscript analysis artifacts
         uses: actions/upload-artifact@v4
         with:
