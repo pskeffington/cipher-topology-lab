@@ -63,6 +63,29 @@ def save_boxplot(
     plt.close()
 
 
+def write_figure_notes(
+    baseline_condition: str,
+    include_baseline_distance_plots: bool,
+) -> None:
+    baseline_display = label_condition(baseline_condition).replace("\n", " ")
+    note = f"""
+# Figure notes
+
+Distance figures show stream-level Euclidean distances to the {baseline_display} condition centroid.
+The distance CSV retains all streams, including the baseline condition. If the baseline is displayed,
+its values represent within-baseline dispersion around the baseline centroid rather than zero distance.
+
+Displayed distance plots exclude the baseline condition by default to emphasize nonbaseline separation.
+Set `--include-baseline-distance-plots` to display baseline dispersion in distance figures.
+
+Persistence-entropy figures are not distance-to-baseline figures and therefore retain all configured
+conditions.
+
+Current distance-plot baseline inclusion: {include_baseline_distance_plots}.
+"""
+    write_diagnostic_note(Path("results/logs/figure_notes.md"), note)
+
+
 def plot_entropy_by_condition(features: pd.DataFrame, homology_dim: int) -> int:
     plot_count = 0
     subset = features[features["homology_dim"] == homology_dim].copy()
@@ -90,7 +113,11 @@ def plot_entropy_by_condition(features: pd.DataFrame, homology_dim: int) -> int:
     return plot_count
 
 
-def plot_distances_by_condition(distances: pd.DataFrame, baseline_condition: str) -> int:
+def plot_distances_by_condition(
+    distances: pd.DataFrame,
+    baseline_condition: str,
+    include_baseline: bool = False,
+) -> int:
     if distances.empty:
         return 0
     plot_count = 0
@@ -104,6 +131,10 @@ def plot_distances_by_condition(distances: pd.DataFrame, baseline_condition: str
         ["backend", "embedding_name", "homology_dim"]
     ):
         nonbaseline = group[group["condition"] != group["baseline_condition"]]
+        plot_group = group if include_baseline else nonbaseline
+        if plot_group.empty:
+            skipped.append(f"{backend} / {embedding_name} / H{homology_dim}")
+            continue
         has_distance_signal = bool(nonbaseline["euclidean_feature_distance"].abs().sum() > 0)
         if not has_distance_signal:
             skipped.append(f"{backend} / {embedding_name} / H{homology_dim}")
@@ -111,14 +142,16 @@ def plot_distances_by_condition(distances: pd.DataFrame, baseline_condition: str
         for column, ylabel, suffix in distance_specs:
             if column not in group.columns:
                 continue
+            baseline_suffix = "with_baseline" if include_baseline else "nonbaseline"
             out = (
                 Path("results/figures")
-                / f"tda_distance_to_{baseline_slug}__{slug(backend)}__{slug(embedding_name)}__h{homology_dim}__{suffix}.png"
+                / f"tda_distance_to_{baseline_slug}__{slug(backend)}__{slug(embedding_name)}__h{homology_dim}__{suffix}__{baseline_suffix}.png"
             )
+            title_suffix = "with baseline" if include_baseline else "nonbaseline only"
             save_boxplot(
-                group,
+                plot_group,
                 column,
-                f"TDA Distance to {baseline_condition}: {backend} / {embedding_name} / H{homology_dim}",
+                f"TDA Distance to {baseline_condition}: {backend} / {embedding_name} / H{homology_dim} ({title_suffix})",
                 ylabel,
                 out,
             )
@@ -134,6 +167,11 @@ def plot_distances_by_condition(distances: pd.DataFrame, baseline_condition: str
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", required=True)
+    parser.add_argument(
+        "--include-baseline-distance-plots",
+        action="store_true",
+        help="Display baseline-condition dispersion in distance figures. CSV outputs always retain baseline rows.",
+    )
     args = parser.parse_args()
     config = read_json(args.config)
     baseline_condition = config.get("baseline_condition", "os_csprng")
@@ -170,7 +208,12 @@ def main() -> None:
     fallback_used = features["backend"].astype(str).str.contains("fallback", case=False).any()
     h1_plot_count = plot_entropy_by_condition(features, homology_dim=1)
     h0_plot_count = plot_entropy_by_condition(features, homology_dim=0)
-    distance_plot_count = plot_distances_by_condition(distances, baseline_condition)
+    distance_plot_count = plot_distances_by_condition(
+        distances,
+        baseline_condition,
+        include_baseline=args.include_baseline_distance_plots,
+    )
+    write_figure_notes(baseline_condition, args.include_baseline_distance_plots)
 
     if fallback_used:
         write_diagnostic_note(
