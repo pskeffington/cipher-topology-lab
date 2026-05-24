@@ -51,14 +51,14 @@ jobs:
       - name: Analyze outputs
         run: python scripts/04_analyze_results.py --config ${{ github.event.inputs.config }}
 
-      - name: Validate artifact consistency
-        run: python scripts/09_validate_artifact_consistency.py
-
       - name: Export external randomness-test inputs
         run: python scripts/05_export_randomness_inputs.py --manifest data/raw/stream_manifest.csv
 
       - name: Parse external randomness-test outputs
         run: python scripts/06_parse_external_results.py
+
+      - name: Validate artifact consistency
+        run: python scripts/09_validate_artifact_consistency.py
 
       - name: Upload manuscript analysis artifacts
         uses: actions/upload-artifact@v4
