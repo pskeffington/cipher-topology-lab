@@ -1,0 +1,11 @@
+condition,embedding_method,homology_dimension,n_points,persistence_entropy,total_persistence,max_lifetime,mean_lifetime,landscape_l1_norm,diagnostic_label,notes
+AES_128_CTR_baseline,sliding_window_bytes,H0,4096,0.982,12.41,0.031,0.0030,1.204,baseline_strong,"PLACEHOLDER-SCAFFOLD: replace with computed persistent-homology features"
+AES_128_CTR_baseline,sliding_window_bytes,H1,4096,0.711,2.14,0.018,0.0012,0.224,baseline_strong,"PLACEHOLDER-SCAFFOLD: replace with computed persistent-homology features"
+SHA256_expansion_baseline,sliding_window_bytes,H0,4096,0.979,12.36,0.030,0.0030,1.198,baseline_deterministic,"PLACEHOLDER-SCAFFOLD: replace with computed persistent-homology features"
+SHA256_expansion_baseline,sliding_window_bytes,H1,4096,0.708,2.11,0.017,0.0012,0.219,baseline_deterministic,"PLACEHOLDER-SCAFFOLD: replace with computed persistent-homology features"
+LCG_weak_control,sliding_window_bytes,H0,4096,0.781,9.02,0.052,0.0049,1.740,weak_positive_control,"PLACEHOLDER-SCAFFOLD: expected divergence from strong baselines"
+LCG_weak_control,sliding_window_bytes,H1,4096,0.402,4.88,0.079,0.0038,0.694,weak_positive_control,"PLACEHOLDER-SCAFFOLD: expected divergence from strong baselines"
+xorshift_weak_control,sliding_window_bytes,H0,4096,0.846,10.21,0.044,0.0041,1.503,weak_positive_control,"PLACEHOLDER-SCAFFOLD: expected moderate divergence from strong baselines"
+xorshift_weak_control,sliding_window_bytes,H1,4096,0.511,3.27,0.044,0.0021,0.411,weak_positive_control,"PLACEHOLDER-SCAFFOLD: expected moderate divergence from strong baselines"
+biased_bitstream_control,sliding_window_bytes,H0,4096,0.690,7.14,0.090,0.0064,2.203,trivial_positive_control,"PLACEHOLDER-SCAFFOLD: sanity check for topological sensitivity"
+biased_bitstream_control,sliding_window_bytes,H1,4096,0.301,5.80,0.120,0.0049,0.902,trivial_positive_control,"PLACEHOLDER-SCAFFOLD: sanity check for topological sensitivity"
