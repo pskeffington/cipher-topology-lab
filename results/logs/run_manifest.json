@@ -1,0 +1,28 @@
+{
+  "manifest_status": "PLACEHOLDER_SCAFFOLD",
+  "project": "cipher-topology-lab",
+  "artifact_set": "baseline_security_eval_scaffold",
+  "generated_by": "manual_scaffold_pending_pipeline_execution",
+  "code_ref": "main",
+  "run_stage": "pre-execution_schema_and_result_contract",
+  "conditions": [
+    "AES_128_CTR_baseline",
+    "SHA256_expansion_baseline",
+    "OS_CSPRNG_sensitivity",
+    "LCG_weak_control",
+    "xorshift_weak_control",
+    "biased_bitstream_control"
+  ],
+  "expected_outputs": [
+    "results/tables/baseline_randomness_tests.csv",
+    "results/tables/tda_feature_summary.csv",
+    "results/figures/persistence_diagram_baseline.svg",
+    "manuscript/cipher_topology_whitepaper.pdf"
+  ],
+  "validation_notes": [
+    "Current CSV values are schema scaffolds and must not be cited as empirical results.",
+    "Pipeline execution must replace placeholder values with generated diagnostics.",
+    "All future runs should record seed, key, IV, generator settings, code commit SHA, timestamp, and output checksums."
+  ],
+  "next_required_action": "implement executable stream generation and diagnostics pipeline"
+}
