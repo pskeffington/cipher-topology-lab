@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="600" viewBox="0 0 900 600" role="img" aria-labelledby="title desc">
+  <title id="title">Persistence Diagram Baseline Scaffold</title>
+  <desc id="desc">Placeholder scaffold for a persistence diagram. Values are schematic and must be replaced by computed persistent-homology output.</desc>
+  <rect width="900" height="600" fill="white"/>
+  <text x="450" y="42" text-anchor="middle" font-family="Arial, sans-serif" font-size="24">Persistence Diagram Baseline Scaffold</text>
+  <text x="450" y="72" text-anchor="middle" font-family="Arial, sans-serif" font-size="14">PLACEHOLDER — replace with computed persistent-homology output</text>
+  <line x1="120" y1="500" x2="780" y2="500" stroke="black" stroke-width="2"/>
+  <line x1="120" y1="500" x2="120" y2="110" stroke="black" stroke-width="2"/>
+  <line x1="120" y1="500" x2="760" y2="140" stroke="gray" stroke-width="1.5" stroke-dasharray="6 6"/>
+  <text x="450" y="550" text-anchor="middle" font-family="Arial, sans-serif" font-size="16">Birth</text>
+  <text x="50" y="310" text-anchor="middle" transform="rotate(-90 50 310)" font-family="Arial, sans-serif" font-size="16">Death</text>
+  <circle cx="210" cy="430" r="5" fill="black"/>
+  <circle cx="250" cy="405" r="5" fill="black"/>
+  <circle cx="310" cy="385" r="5" fill="black"/>
+  <circle cx="390" cy="330" r="5" fill="black"/>
+  <circle cx="440" cy="315" r="5" fill="black"/>
+  <circle cx="520" cy="270" r="5" fill="black"/>
+  <circle cx="610" cy="220" r="5" fill="black"/>
+  <rect x="560" y="450" width="280" height="80" fill="white" stroke="black"/>
+  <text x="575" y="475" font-family="Arial, sans-serif" font-size="13">Status: schema/figure scaffold</text>
+  <text x="575" y="498" font-family="Arial, sans-serif" font-size="13">Condition: AES_128_CTR_baseline</text>
+  <text x="575" y="521" font-family="Arial, sans-serif" font-size="13">Empirical output pending pipeline</text>
+</svg>
