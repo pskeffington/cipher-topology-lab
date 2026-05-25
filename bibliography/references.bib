@@ -1,11 +1,62 @@
-% Starter bibliography for cipher topology diagnostic project.
-% Replace placeholders with verified cryptography, randomness testing, TDA, and reproducibility references.
+% Bibliography for cipher topology diagnostic project.
+% Keep diagnostic and evaluation references separate from cryptanalysis claims.
 
-@comment{Add applied cryptography, randomness-testing, persistent-homology, TDA software, and benchmark-design references here.}
+@misc{nist_sp800_22_rev1a,
+  author       = {{National Institute of Standards and Technology}},
+  title        = {A Statistical Test Suite for Random and Pseudorandom Number Generators for Cryptographic Applications},
+  year         = {2010},
+  howpublished = {NIST Special Publication 800-22 Revision 1a},
+  url          = {https://csrc.nist.gov/publications/detail/sp/800-22/rev-1a/final},
+  note         = {Randomness-testing reference for comparison diagnostics.}
+}
 
-@misc{cipher_topology_bibliography_placeholder,
-  title        = {Cipher Topology Bibliography Placeholder},
-  author       = {{Project bibliography manifest}},
-  year         = {2026},
-  note         = {Placeholder only. Replace with verified method and software references before publication-facing use.}
+@misc{nist_fips_197,
+  author       = {{National Institute of Standards and Technology}},
+  title        = {Advanced Encryption Standard (AES)},
+  year         = {2001},
+  howpublished = {Federal Information Processing Standards Publication 197},
+  url          = {https://csrc.nist.gov/publications/detail/fips/197/final},
+  note         = {AES standard reference; use for algorithm background only.}
+}
+
+@article{edelsbrunner_letscher_zomorodian_2002,
+  author  = {Edelsbrunner, Herbert and Letscher, David and Zomorodian, Afra},
+  title   = {Topological Persistence and Simplification},
+  journal = {Discrete \& Computational Geometry},
+  year    = {2002},
+  volume  = {28},
+  number  = {4},
+  pages   = {511--533},
+  doi     = {10.1007/s00454-002-2885-2}
+}
+
+@article{carlsson_2009_topology,
+  author  = {Carlsson, Gunnar},
+  title   = {Topology and Data},
+  journal = {Bulletin of the American Mathematical Society},
+  year    = {2009},
+  volume  = {46},
+  number  = {2},
+  pages   = {255--308},
+  doi     = {10.1090/S0273-0979-09-01249-X}
+}
+
+@article{gudhi_2016,
+  author  = {The GUDHI Project},
+  title   = {GUDHI User and Reference Manual},
+  journal = {GUDHI Editorial Board},
+  year    = {2016},
+  url     = {https://gudhi.inria.fr/},
+  note    = {Software citation placeholder; update with exact version if used.}
+}
+
+@article{tralie_saul_bar_on_2018_ripser,
+  author  = {Tralie, Christopher and Saul, Nathaniel and Bar-On, Rann},
+  title   = {Ripser.py: A Lean Persistent Homology Library for Python},
+  journal = {Journal of Open Source Software},
+  year    = {2018},
+  volume  = {3},
+  number  = {29},
+  pages   = {925},
+  doi     = {10.21105/joss.00925}
 }
