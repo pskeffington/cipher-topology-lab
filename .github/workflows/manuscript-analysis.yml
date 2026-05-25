@@ -55,13 +55,20 @@ jobs:
         run: python scripts/05_export_randomness_inputs.py --manifest data/raw/stream_manifest.csv
 
       - name: Parse external randomness-test outputs
-        run: python scripts/06_parse_external_results.py
+        run: |
+          python scripts/06_parse_external_results.py \
+            --dieharder-dir external_tests/results/dieharder \
+            --out data/processed/external_randomness_tests.csv
+          test $(wc -l < data/processed/external_randomness_tests.csv) -gt 1
 
       - name: Validate artifact consistency
         run: python scripts/09_validate_artifact_consistency.py
 
       - name: Build effect-size tables
         run: python scripts/10_effect_size_tables.py
+
+      - name: Build evidence register
+        run: python scripts/09_build_evidence_register.py --config ${{ github.event.inputs.config }} --output docs/evidence_register.md
 
       - name: Upload manuscript analysis artifacts
         uses: actions/upload-artifact@v4
@@ -75,4 +82,5 @@ jobs:
             results/figures/*
             results/logs/*
             external_tests/inputs/export_manifest.csv
-            results/tables/external_randomness_tests.csv
+            data/processed/external_randomness_tests.csv
+            docs/evidence_register.md
