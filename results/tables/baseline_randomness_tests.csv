@@ -1,0 +1,7 @@
+condition,generator_family,seed_id,n_bytes,monobit_frequency,byte_entropy,serial_correlation,compression_ratio,diagnostic_label,notes
+AES_128_CTR_baseline,AES-128-CTR,seed_0001,1048576,0.50012,7.9991,0.0008,1.0004,baseline_strong,"PLACEHOLDER-SCAFFOLD: replace with generated stream diagnostics after pipeline execution"
+SHA256_expansion_baseline,SHA-256-expansion,seed_0001,1048576,0.49994,7.9989,-0.0005,1.0003,baseline_deterministic,"PLACEHOLDER-SCAFFOLD: deterministic reproducibility baseline"
+OS_CSPRNG_sensitivity,OS-CSPRNG,seed_runtime,1048576,0.50003,7.9990,0.0002,1.0004,sensitivity_strong,"PLACEHOLDER-SCAFFOLD: non-deterministic sensitivity condition"
+LCG_weak_control,LCG,seed_0001,1048576,0.49320,7.6124,0.0415,0.9341,weak_positive_control,"PLACEHOLDER-SCAFFOLD: expected to show detectable structure"
+xorshift_weak_control,xorshift,seed_0001,1048576,0.49781,7.7418,0.0212,0.9620,weak_positive_control,"PLACEHOLDER-SCAFFOLD: expected to show weaker structure than LCG but not cryptographic baseline"
+biased_bitstream_control,biased_stream,seed_0001,1048576,0.55000,7.4012,0.0040,0.9108,trivial_positive_control,"PLACEHOLDER-SCAFFOLD: sanity check for diagnostic sensitivity"
