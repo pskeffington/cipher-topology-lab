@@ -8,6 +8,10 @@ Evaluate whether persistent-homology summaries of ciphertext-derived point cloud
 
 Can persistent-homology features distinguish structured or weakened ciphertext-generation conditions from standard deterministic cipher-output baselines, and how do these topological diagnostics compare with conventional statistical randomness-test batteries?
 
+## Current manuscript evidence configuration
+
+The current manuscript evidence run uses `configs/experiment_64rep.json`. This configuration uses 64 replicates, six conditions, two embeddings, and H0/H1 persistent-homology summaries computed with the manuscript-grade `ripser` backend. The run produces 384 streams, 768 embeddings, 1,536 TDA feature rows, 384 internal randomness-diagnostic rows, and 1,536 distance-to-baseline rows.
+
 ## Configured conditions
 
 | Condition | Description | Role |
@@ -35,11 +39,19 @@ Core features include interval counts, finite interval counts, finite lifetime m
 
 ## Backend rule
 
-Publication-grade evidence must use true persistent-homology backends such as ripser or GUDHI. Any fallback or development backend is diagnostic only and must not be used as manuscript evidence.
+Publication-grade evidence must use true persistent-homology backends such as `ripser` or GUDHI. Any fallback or development backend is diagnostic only and must not be used as manuscript evidence. The current 64-replicate manuscript evidence register reports `ripser` with no fallback backend detected.
 
 ## Baseline-distance rule
 
 Distance-to-baseline tables must identify the configured `baseline_condition`. For `v0.4.1-pre.0`, that baseline is `sha256_seeded_baseline`; OS CSPRNG is a separate non-deterministic sensitivity condition.
+
+## Current internal-evidence result
+
+The strongest stable internal finding is that the LCG weak-control condition separates from the SHA-256 seeded baseline under byte-pair H0 summaries. AES-CTR deterministic-output conditions, OS CSPRNG output, and xorshift32 do not show comparable separation under the current embeddings and feature set.
+
+## External randomness-testing rule
+
+External randomness testing is tracked separately from internal TDA evidence. The failure-safe external-randomness runner records whether Dieharder is available, whether selected input files exist, whether tests were run, and whether parsed external rows are populated. If Dieharder is unavailable, the evidence register must record the external runner status as unavailable rather than treating missing rows as completed external testing.
 
 ## Interpretation rule
 
