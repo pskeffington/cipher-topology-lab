@@ -4,21 +4,61 @@
 
 \section{Results}
 
-Results will be finalized after the next full reproducible run. The primary tables will report stream-level metadata, conventional randomness diagnostics, topological feature summaries, backend status, distance-to-baseline summaries, and between-condition comparisons. All reported claims should trace to the generated evidence register and artifact-coherence validation output.
+The primary internal analysis used the \texttt{configs/experiment\_64rep.json} configuration. This run generated 384 streams, 768 embeddings, 1,536 persistent-homology feature rows, 384 internal randomness-diagnostic rows, and 1,536 distance-to-baseline rows. Artifact-coherence validation passed, artifact-consistency validation passed, and the observed persistent-homology backend was \texttt{ripser}. No fallback backend was detected. The configured baseline condition for distance calculations was \texttt{sha256\_seeded\_baseline}.
+
+\subsection{Primary topological separation}
+
+The strongest and most stable separation occurred for the LCG weak-control condition under the byte-pair embedding in homology dimension zero. Relative to the SHA-256 seeded baseline, LCG showed near-complete separation in both H0 persistence entropy and H0 Euclidean feature distance. For H0 persistence entropy, the LCG comparison had Cliff's $\delta = 0.9751$ and a Mann--Whitney $p$ value of $1.83 \times 10^{-21}$. For H0 distance-to-baseline, the LCG comparison had Cliff's $\delta = 0.9834$ and a Mann--Whitney $p$ value of $8.35 \times 10^{-22}$.
 
 \begin{table}[htbp]
 \centering
-\caption{Planned topological feature summary table}
+\caption{Primary 64-replicate LCG weak-control effects relative to the SHA-256 seeded baseline}
+\label{tab:primary-lcg-effects}
 \begin{adjustbox}{max width=\textwidth}
-\begin{tabular}{llllrrrrr}
+\begin{tabular}{llllrrrr}
 \toprule
-Condition & Embedding & Homology & Replicates & Intervals & Finite Intervals & Mean Lifetime & Max Lifetime & Entropy \\
+Comparison & Embedding & Homology & Metric & $n$ & Baseline $n$ & Cliff's $\delta$ & $p$ value \\
 \midrule
-AES-128 CTR deterministic & byte-pair / sliding-window & H0/H1 & -- & -- & -- & -- & -- & -- \\
-SHA-256 seeded baseline & byte-pair / sliding-window & H0/H1 & -- & -- & -- & -- & -- & -- \\
-OS CSPRNG sensitivity & byte-pair / sliding-window & H0/H1 & -- & -- & -- & -- & -- & -- \\
-Weak controls & byte-pair / sliding-window & H0/H1 & -- & -- & -- & -- & -- & -- \\
+LCG weak control & byte-pair & H0 & Persistence entropy & 64 & 64 & 0.9751 & $1.83 \times 10^{-21}$ \\
+LCG weak control & byte-pair & H0 & Distance to baseline & 64 & 64 & 0.9834 & $8.35 \times 10^{-22}$ \\
+LCG weak control & byte-pair & H1 & Persistence entropy & 64 & 64 & 0.3154 & 0.00210 \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
 \end{table}
+
+The H1 persistence-entropy comparison for LCG under the byte-pair embedding was smaller but still detectable in the 64-replicate run, with Cliff's $\delta = 0.3154$ and $p = 0.00210$. This secondary result suggests that the byte-pair representation contains some H1-sensitive structure for the LCG weak control, but the principal evidence remains the H0 separation.
+
+\subsection{AES-CTR, OS CSPRNG, and xorshift32 comparisons}
+
+The AES-CTR deterministic-output conditions did not show comparable separation from the SHA-256 seeded baseline. In the byte-pair H0 persistence-entropy comparison, AES-CTR with deterministic plaintext had Cliff's $\delta = 0.0273$ and $p = 0.7914$, while the AES-CTR zero-plaintext keystream condition had Cliff's $\delta = 0.0264$ and $p = 0.7988$. The corresponding byte-pair H0 distance-to-baseline effects were also small, with Cliff's $\delta = 0.0220$ for deterministic plaintext and $\delta = 0.0469$ for the zero-plaintext keystream condition.
+
+Operating-system CSPRNG output also remained close to the SHA-256 seeded baseline under the tested features. For byte-pair H0 persistence entropy, the OS CSPRNG comparison had Cliff's $\delta = 0.1431$ and $p = 0.1633$; for byte-pair H0 distance-to-baseline, Cliff's $\delta = 0.0215$ and $p = 0.8358$. The xorshift32 weak-control condition did not show the same topological separation as LCG under this configuration. Its byte-pair H0 persistence-entropy comparison had Cliff's $\delta = 0.1616$ and $p = 0.1153$, and its byte-pair H0 distance-to-baseline comparison had Cliff's $\delta = -0.0117$ and $p = 0.9108$.
+
+\begin{table}[htbp]
+\centering
+\caption{Selected 64-replicate byte-pair H0 comparisons relative to the SHA-256 seeded baseline}
+\label{tab:selected-h0-effects}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{llrr}
+\toprule
+Condition & Metric & Cliff's $\delta$ & $p$ value \\
+\midrule
+AES-CTR deterministic plaintext & Persistence entropy & 0.0273 & 0.7914 \\
+AES-CTR zero-plaintext keystream & Persistence entropy & 0.0264 & 0.7988 \\
+OS CSPRNG & Persistence entropy & 0.1431 & 0.1633 \\
+xorshift32 weak control & Persistence entropy & 0.1616 & 0.1153 \\
+LCG weak control & Persistence entropy & 0.9751 & $1.83 \times 10^{-21}$ \\
+AES-CTR deterministic plaintext & Distance to baseline & 0.0220 & 0.8321 \\
+AES-CTR zero-plaintext keystream & Distance to baseline & 0.0469 & 0.6490 \\
+OS CSPRNG & Distance to baseline & 0.0215 & 0.8358 \\
+xorshift32 weak control & Distance to baseline & -0.0117 & 0.9108 \\
+LCG weak control & Distance to baseline & 0.9834 & $8.35 \times 10^{-22}$ \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}
+
+\subsection{Interpretation of the internal run}
+
+Taken together, the 64-replicate internal run supports the pipeline as a positive-control diagnostic for at least one weak generator. The LCG condition was consistently separated from the SHA-256 seeded baseline under byte-pair H0 summaries, while AES-CTR deterministic-output conditions, OS CSPRNG output, and xorshift32 did not show comparable separation under the current embeddings and feature set. These findings should be interpreted as diagnostic evidence about the tested representations and summaries, not as a cryptanalytic claim or as proof of security for any cipher or random source.
