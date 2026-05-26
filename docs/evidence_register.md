@@ -1,6 +1,6 @@
 # Evidence Register
 
-Generated: `2026-05-26T02:53:59+00:00`
+Generated: `2026-05-26T03:01:50+00:00`
 
 ## Configuration
 
@@ -45,6 +45,9 @@ Missing required artifact: data/interim/embedding_manifest.csv
 - External randomness table: `data/processed/external_randomness_tests.csv`
 - Rows: `0`
 - Populated: `False`
+- Status report: `results/logs/external_randomness_status.md`
+- External runner status: `UNAVAILABLE`
+- External runner message: `Dieharder executable not found on PATH: dieharder`
 
 ## Registered figures
 
@@ -54,6 +57,7 @@ No figures detected.
 
 | Log path |
 | --- |
+| `results/logs/external_randomness_status.md` |
 | `results/logs/segmented_run_report.md` |
 
 ## Claim-control rule
