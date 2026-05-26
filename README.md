@@ -16,6 +16,10 @@ The current manuscript evidence run uses `configs/experiment_64rep.json` with 64
 
 External randomness testing is supported but may be unavailable on a local machine if `dieharder` is not installed. The external-randomness runner now writes an explicit status report even when Dieharder is missing, so evidence files distinguish unavailable external infrastructure from completed external analysis.
 
+## Latest daily update
+
+The May 26, 2026 documentation update is recorded in `docs/daily_updates/2026-05-26.md`. It captures the current generated CSV artifact families, the active figure set for persistence-entropy and distance-to-OS-CSPRNG diagnostics, and the project claim boundary: diagnostic and reproducibility evidence only, not cryptanalysis.
+
 ## Primary contribution
 
 A reproducible pipeline that:
@@ -57,6 +61,8 @@ cipher-topology-lab/
 │   ├── interim/
 │   └── processed/
 ├── docs/
+│   ├── daily_updates/
+│   │   └── 2026-05-26.md
 │   ├── protocol.md
 │   ├── data_dictionary.md
 │   ├── evidence_register.md
@@ -195,4 +201,4 @@ This project is suitable for an applied cryptography, cybersecurity engineering,
 
 ## Status
 
-`v0.4.1-pre.0`: execution-repair pre-release with deterministic baseline, corrected AES-CTR metadata language, stratified TDA outputs, standardized distance metrics, object-oriented segmented workflow, 64-replicate `ripser` evidence, related-work manuscript section, and failure-safe external-randomness status reporting.
+`v0.4.1-pre.0`: execution-repair pre-release with deterministic baseline, corrected AES-CTR metadata language, stratified TDA outputs, standardized distance metrics, object-oriented segmented workflow, 64-replicate `ripser` evidence, related-work manuscript section, failure-safe external-randomness status reporting, and a dated documentation update for the May 26, 2026 artifact/figure inventory.
