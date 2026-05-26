@@ -5,8 +5,10 @@ from pathlib import Path
 
 import pandas as pd
 
+from ciphertopology.utils import read_json
 
-def require_file(path: str) -> Path:
+
+def require_file(path: str | Path) -> Path:
     p = Path(path)
     if not p.exists():
         raise SystemExit(f"Missing required artifact: {p}")
@@ -21,9 +23,8 @@ def compare_backend_summary(features: pd.DataFrame, backend_summary: pd.DataFram
         .sort_values(["backend", "embedding_name", "homology_dim"])
         .reset_index(drop=True)
     )
-    observed = (
-        backend_summary.sort_values(["backend", "embedding_name", "homology_dim"])
-        .reset_index(drop=True)
+    observed = backend_summary.sort_values(["backend", "embedding_name", "homology_dim"]).reset_index(
+        drop=True
     )
     if not expected.equals(observed):
         raise SystemExit(
@@ -59,23 +60,46 @@ def validate_distance_backends(features: pd.DataFrame, distances: pd.DataFrame) 
         raise SystemExit(f"Distance table contains backend/embedding keys absent from features: {missing}")
 
 
+def validate_distance_baseline(distances: pd.DataFrame, baseline_condition: str) -> None:
+    if "baseline_condition" not in distances.columns:
+        raise SystemExit("Distance table is missing baseline_condition column.")
+    observed = set(distances["baseline_condition"].dropna().astype(str))
+    expected = {baseline_condition}
+    if observed != expected:
+        raise SystemExit(
+            f"Distance table baseline mismatch: observed={sorted(observed)} expected={sorted(expected)}"
+        )
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
+    parser.add_argument("--config", default="configs/experiment_v0.json")
     parser.add_argument("--features", default="data/processed/tda_features.csv")
     parser.add_argument("--backend-summary", default="results/tables/tda_backend_summary.csv")
-    parser.add_argument("--distances", default="results/tables/tda_distance_to_os_csprng.csv")
+    parser.add_argument("--distances", default=None)
     parser.add_argument("--allow-fallback", action="store_true")
     args = parser.parse_args()
 
+    config = read_json(args.config)
+    baseline_condition = config.get("baseline_condition")
+    if not baseline_condition:
+        raise SystemExit(f"Config has no baseline_condition: {args.config}")
+
+    distance_path = args.distances or f"results/tables/tda_distance_to_{baseline_condition}.csv"
+
     features = pd.read_csv(require_file(args.features))
     backend_summary = pd.read_csv(require_file(args.backend_summary))
-    distances = pd.read_csv(require_file(args.distances))
+    distances = pd.read_csv(require_file(distance_path))
 
     compare_backend_summary(features, backend_summary)
     validate_no_fallback_for_manuscript(features, args.allow_fallback)
     validate_distance_backends(features, distances)
+    validate_distance_baseline(distances, baseline_condition)
 
-    print("Artifact consistency validation passed.")
+    print(
+        "Artifact consistency validation passed: "
+        f"baseline={baseline_condition}, distance_table={distance_path}."
+    )
 
 
 if __name__ == "__main__":
