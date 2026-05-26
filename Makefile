@@ -1,8 +1,9 @@
-.PHONY: setup setup-smoke data embed features analysis export-randomness evidence-register manuscript clean clean-generated test smoke
+.PHONY: setup setup-smoke data embed features analysis export-randomness evidence-register manuscript clean clean-generated test smoke micro micro-smoke micro-full micro-stage
 
 CONFIG ?= configs/experiment_v0.json
 SMOKE_CONFIG ?= configs/smoke_test.json
 PYTHON ?= .venv/bin/python
+STAGE ?= all
 
 setup:
 	python3 -m venv .venv
@@ -32,6 +33,18 @@ export-randomness:
 
 evidence-register:
 	$(PYTHON) scripts/09_build_evidence_register.py --config $(CONFIG) --output docs/evidence_register.md
+
+micro:
+	$(PYTHON) scripts/11_run_micro_workflow.py --config $(CONFIG)
+
+micro-smoke:
+	$(PYTHON) scripts/11_run_micro_workflow.py --config $(SMOKE_CONFIG) --allow-fallback
+
+micro-full:
+	$(PYTHON) scripts/11_run_micro_workflow.py --config $(CONFIG)
+
+micro-stage:
+	$(PYTHON) scripts/11_run_micro_workflow.py --config $(CONFIG) --stage $(STAGE)
 
 clean-generated:
 	rm -rf data/raw/* data/interim/* data/processed/* results/figures/* results/tables/* results/logs/* external_tests/inputs/* external_tests/results/*
