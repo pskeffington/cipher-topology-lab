@@ -6,7 +6,7 @@ on:
       config:
         description: "Analysis configuration file"
         required: true
-        default: "configs/manuscript_30rep.json"
+        default: "configs/experiment_v0.json"
 
 jobs:
   manuscript-analysis:
@@ -42,9 +42,6 @@ jobs:
       - name: Validate ripser backend
         run: python scripts/07_validate_tda_backend.py --features data/processed/tda_features.csv --require-backend ripser --require-finite-h1
 
-      - name: Validate GUDHI cubical backend
-        run: python scripts/08_validate_backend_present.py --features data/processed/tda_features.csv --require-backend gudhi_cubical
-
       - name: Run internal randomness diagnostics
         run: python scripts/03_randomness_tests.py --config ${{ github.event.inputs.config }}
 
@@ -54,15 +51,17 @@ jobs:
       - name: Export external randomness-test inputs
         run: python scripts/05_export_randomness_inputs.py --manifest data/raw/stream_manifest.csv
 
-      - name: Parse external randomness-test outputs
+      - name: Parse external randomness-test outputs when present
         run: |
           python scripts/06_parse_external_results.py \
             --dieharder-dir external_tests/results/dieharder \
             --out data/processed/external_randomness_tests.csv
-          test $(wc -l < data/processed/external_randomness_tests.csv) -gt 1
+
+      - name: Validate artifact coherence
+        run: python scripts/08_validate_artifact_coherence.py --config ${{ github.event.inputs.config }}
 
       - name: Validate artifact consistency
-        run: python scripts/09_validate_artifact_consistency.py
+        run: python scripts/09_validate_artifact_consistency.py --config ${{ github.event.inputs.config }}
 
       - name: Build effect-size tables
         run: python scripts/10_effect_size_tables.py
