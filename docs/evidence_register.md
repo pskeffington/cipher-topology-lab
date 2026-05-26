@@ -1,6 +1,6 @@
 # Evidence Register
 
-Generated: `2026-05-26T01:48:47+00:00`
+Generated: `2026-05-26T01:50:00+00:00`
 
 ## Configuration
 
@@ -36,8 +36,8 @@ Validated artifact coherence: conditions=6, embeddings=2, homology_dims=[0, 1], 
 
 ## Backend status
 
-- Observed TDA backends: `fallback_threshold_graph`
-- Fallback backend detected: `True`
+- Observed TDA backends: `ripser`
+- Fallback backend detected: `False`
 - Manuscript-grade rule: use only true persistent-homology backend outputs for evidentiary claims. Fallback outputs are diagnostic only.
 
 ## External randomness status
@@ -50,18 +50,22 @@ Validated artifact coherence: conditions=6, embeddings=2, homology_dims=[0, 1], 
 
 | Figure path |
 | --- |
-| `results/figures/h0_persistence_entropy__fallback_threshold_graph__sliding_window_8d.png` |
-| `results/figures/tda_distance_to_sha256_seeded_baseline__fallback_threshold_graph__sliding_window_8d__h0__raw__nonbaseline.png` |
-| `results/figures/tda_distance_to_sha256_seeded_baseline__fallback_threshold_graph__sliding_window_8d__h0__zscored__nonbaseline.png` |
+| `results/figures/h0_persistence_entropy__ripser__byte_pair_2d.png` |
+| `results/figures/h0_persistence_entropy__ripser__sliding_window_8d.png` |
+| `results/figures/h1_persistence_entropy__ripser__byte_pair_2d.png` |
+| `results/figures/tda_distance_to_sha256_seeded_baseline__ripser__byte_pair_2d__h0__raw__nonbaseline.png` |
+| `results/figures/tda_distance_to_sha256_seeded_baseline__ripser__byte_pair_2d__h0__zscored__nonbaseline.png` |
+| `results/figures/tda_distance_to_sha256_seeded_baseline__ripser__byte_pair_2d__h1__raw__nonbaseline.png` |
+| `results/figures/tda_distance_to_sha256_seeded_baseline__ripser__byte_pair_2d__h1__zscored__nonbaseline.png` |
+| `results/figures/tda_distance_to_sha256_seeded_baseline__ripser__sliding_window_8d__h0__raw__nonbaseline.png` |
+| `results/figures/tda_distance_to_sha256_seeded_baseline__ripser__sliding_window_8d__h0__zscored__nonbaseline.png` |
 
 ## Registered logs
 
 | Log path |
 | --- |
 | `results/logs/distance_plots_skipped.txt` |
-| `results/logs/fallback_backend_used.txt` |
 | `results/logs/figure_notes.md` |
-| `results/logs/h1_plot_skipped.txt` |
 | `results/logs/segmented_run_report.md` |
 
 ## Claim-control rule
