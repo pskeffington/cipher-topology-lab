@@ -9,6 +9,8 @@ PYTHON_BIN="${PYTHON:-python}"
 ALLOW_FALLBACK=1
 PARSE_EXTERNAL=0
 BUILD_MANUSCRIPT=0
+FAIL_FAST=0
+REPORT_PATH="results/logs/segmented_run_report.md"
 STAGES=()
 
 usage() {
@@ -27,6 +29,10 @@ Modes:
   stage <names...>   Run only the listed micro-stages with the selected config.
   list               Print available micro-stages.
 
+Failure behavior:
+  The segmented runner continues after stage failures by default and writes a report after every stage.
+  Report path: results/logs/segmented_run_report.md
+
 Options:
   --config PATH          Override config path.
   --python PATH          Override Python executable.
@@ -34,6 +40,8 @@ Options:
   --allow-fallback      Allow fallback backend during consistency validation.
   --parse-external      Parse external randomness-test outputs after export.
   --build-manuscript    Build manuscript PDF after evidence generation.
+  --fail-fast           Stop at the first failed stage.
+  --report-path PATH    Override segmented run report path.
   -h, --help            Show this help.
 
 Available stages:
@@ -89,6 +97,14 @@ while [[ $# -gt 0 ]]; do
       BUILD_MANUSCRIPT=1
       shift
       ;;
+    --fail-fast)
+      FAIL_FAST=1
+      shift
+      ;;
+    --report-path)
+      REPORT_PATH="$2"
+      shift 2
+      ;;
     -h|--help)
       usage
       exit 0
@@ -129,7 +145,7 @@ case "${MODE}" in
     ;;
 esac
 
-CMD=("${PYTHON_BIN}" "scripts/11_run_micro_workflow.py" "--config" "${CONFIG}")
+CMD=("${PYTHON_BIN}" "scripts/11_run_micro_workflow.py" "--config" "${CONFIG}" "--report-path" "${REPORT_PATH}")
 
 if [[ "${MODE}" == "stage" ]]; then
   CMD+=("--stage" "${STAGES[@]}")
@@ -147,8 +163,13 @@ if [[ "${BUILD_MANUSCRIPT}" -eq 1 ]]; then
   CMD+=("--build-manuscript")
 fi
 
+if [[ "${FAIL_FAST}" -eq 1 ]]; then
+  CMD+=("--fail-fast")
+fi
+
 echo "Repo: ${ROOT_DIR}"
 echo "Config: ${CONFIG}"
 echo "Python: ${PYTHON_BIN}"
+echo "Report: ${REPORT_PATH}"
 echo "Command: ${CMD[*]}"
 exec "${CMD[@]}"
