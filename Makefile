@@ -1,4 +1,4 @@
-.PHONY: setup setup-smoke data embed features analysis export-randomness evidence-register manuscript clean clean-generated test smoke micro micro-smoke micro-full micro-stage segmented-smoke segmented-full segmented-stage segmented-list
+.PHONY: setup setup-smoke data embed features analysis export-randomness external-randomness evidence-register manuscript clean clean-generated test smoke micro micro-smoke micro-full micro-stage segmented-smoke segmented-full segmented-stage segmented-list
 
 CONFIG ?= configs/experiment_v0.json
 SMOKE_CONFIG ?= configs/smoke_test.json
@@ -30,6 +30,9 @@ analysis:
 
 export-randomness:
 	$(PYTHON) scripts/05_export_randomness_inputs.py --manifest data/raw/stream_manifest.csv
+
+external-randomness:
+	$(PYTHON) scripts/12_run_external_randomness.py --allow-missing-dieharder
 
 evidence-register:
 	$(PYTHON) scripts/09_build_evidence_register.py --config $(CONFIG) --output docs/evidence_register.md
