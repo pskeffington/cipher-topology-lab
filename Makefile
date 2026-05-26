@@ -1,4 +1,4 @@
-.PHONY: setup setup-smoke data embed features analysis export-randomness evidence-register manuscript clean clean-generated test smoke micro micro-smoke micro-full micro-stage
+.PHONY: setup setup-smoke data embed features analysis export-randomness evidence-register manuscript clean clean-generated test smoke micro micro-smoke micro-full micro-stage segmented-smoke segmented-full segmented-stage segmented-list
 
 CONFIG ?= configs/experiment_v0.json
 SMOKE_CONFIG ?= configs/smoke_test.json
@@ -45,6 +45,18 @@ micro-full:
 
 micro-stage:
 	$(PYTHON) scripts/11_run_micro_workflow.py --config $(CONFIG) --stage $(STAGE)
+
+segmented-smoke:
+	PYTHON=$(PYTHON) bash scripts/run_segmented.sh smoke
+
+segmented-full:
+	PYTHON=$(PYTHON) bash scripts/run_segmented.sh full
+
+segmented-stage:
+	PYTHON=$(PYTHON) bash scripts/run_segmented.sh --config $(CONFIG) stage $(STAGE)
+
+segmented-list:
+	bash scripts/run_segmented.sh list
 
 clean-generated:
 	rm -rf data/raw/* data/interim/* data/processed/* results/figures/* results/tables/* results/logs/* external_tests/inputs/* external_tests/results/*
