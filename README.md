@@ -10,6 +10,12 @@ The project does **not** claim to break AES, Ascon, DES, or any standardized cip
 
 Can persistent-homology features distinguish structured or weakened ciphertext-generation conditions from deterministic cryptographic baselines and weak controls, and how do these topological diagnostics compare with conventional statistical randomness-test batteries?
 
+## Current evidence state
+
+The current manuscript evidence run uses `configs/experiment_64rep.json` with 64 replicates, two embeddings, H0/H1 persistent-homology features, and the `ripser` backend. The run produces 384 streams, 768 embeddings, 1,536 TDA feature rows, 384 internal randomness-diagnostic rows, and 1,536 distance-to-baseline rows. The strongest stable internal finding is LCG weak-control separation from the SHA-256 seeded baseline under byte-pair H0 summaries. AES-CTR, OS CSPRNG, and xorshift32 do not show comparable separation under the current feature set.
+
+External randomness testing is supported but may be unavailable on a local machine if `dieharder` is not installed. The external-randomness runner now writes an explicit status report even when Dieharder is missing, so evidence files distinguish unavailable external infrastructure from completed external analysis.
+
 ## Primary contribution
 
 A reproducible pipeline that:
@@ -18,7 +24,7 @@ A reproducible pipeline that:
 2. Converts bitstreams and byte streams into point clouds or explicitly configured cubical-complex inputs.
 3. Computes persistent-homology features.
 4. Benchmarks topological summaries against conventional randomness diagnostics.
-5. Produces manuscript-ready tables, figures, validation logs, and an evidence register.
+5. Produces manuscript-ready tables, figures, validation logs, external-test status logs, and an evidence register.
 
 ## Cipher scope
 
@@ -43,6 +49,8 @@ No restricted datasets are required. The complete primary dataset is generated l
 cipher-topology-lab/
 ├── configs/
 │   ├── experiment_v0.json
+│   ├── experiment_32rep.json
+│   ├── experiment_64rep.json
 │   └── smoke_test.json
 ├── data/
 │   ├── raw/
@@ -74,7 +82,9 @@ cipher-topology-lab/
 │   ├── 09_build_evidence_register.py
 │   ├── 09_validate_artifact_consistency.py
 │   ├── 10_effect_size_tables.py
-│   └── 11_run_micro_workflow.py
+│   ├── 11_run_micro_workflow.py
+│   ├── 12_run_external_randomness.py
+│   └── run_segmented.sh
 ├── src/
 │   └── ciphertopology/
 ├── tests/
@@ -85,35 +95,36 @@ cipher-topology-lab/
 └── README.md
 ```
 
-## One-command micro workflow
+## One-command segmented workflow
 
 After setup, the object-oriented workflow runner can execute the whole segmented pipeline from a terminal:
 
 ```bash
 make setup
-make micro-smoke
+./scripts/run_segmented.sh smoke --python .venv/bin/python
 ```
 
-For the full configured analysis:
+For the current manuscript-scale internal analysis:
 
 ```bash
-make setup
-make micro-full
+./scripts/run_segmented.sh full --strict --python .venv/bin/python --config configs/experiment_64rep.json
 ```
 
-The direct Python form is:
+The segmented runner continues after stage failures by default and writes a partial/final report to:
 
-```bash
-python scripts/11_run_micro_workflow.py --config configs/smoke_test.json --allow-fallback
+```text
+results/logs/segmented_run_report.md
 ```
+
+Use `--fail-fast` only when you want to stop at the first failed stage.
 
 ## Segmented micro-stages
 
 The micro workflow is built from small stage objects. Any stage or ordered subset can be run directly:
 
 ```bash
-python scripts/11_run_micro_workflow.py --config configs/experiment_v0.json --stage generate embed features
-python scripts/11_run_micro_workflow.py --config configs/experiment_v0.json --stage randomness analysis coherence consistency effects evidence
+./scripts/run_segmented.sh --config configs/experiment_64rep.json stage generate embed features --python .venv/bin/python
+./scripts/run_segmented.sh --config configs/experiment_64rep.json stage randomness analysis coherence consistency effects evidence --python .venv/bin/python
 ```
 
 Available stages:
@@ -135,6 +146,30 @@ manuscript
 ```
 
 Use `--parse-external` to parse external randomness-test outputs after export, `--allow-fallback` for engineering runs that permit fallback TDA backends, and `--build-manuscript` to run `latexmk` after evidence generation.
+
+## External randomness testing
+
+The repository includes a failure-safe external randomness runner:
+
+```bash
+make external-randomness
+```
+
+or directly:
+
+```bash
+python scripts/12_run_external_randomness.py --allow-missing-dieharder
+```
+
+When `dieharder` is installed, the runner executes a selected Dieharder test against replicate-zero exported streams, parses results into `data/processed/external_randomness_tests.csv`, and writes `results/logs/external_randomness_status.md`. When `dieharder` is not available, it still writes a schema-valid external randomness table and a status report explaining that external testing was unavailable.
+
+On platforms where Homebrew does not provide Dieharder, run Dieharder through Docker or another Linux environment, then parse the resulting `external_tests/results/dieharder/*.txt` files with:
+
+```bash
+python scripts/06_parse_external_results.py \
+  --dieharder-dir external_tests/results/dieharder \
+  --out data/processed/external_randomness_tests.csv
+```
 
 ## Minimal workflow
 
@@ -160,4 +195,4 @@ This project is suitable for an applied cryptography, cybersecurity engineering,
 
 ## Status
 
-`v0.4.1-pre.0`: execution-repair pre-release with deterministic baseline, corrected AES-CTR metadata language, stratified TDA outputs, standardized distance metrics, and an object-oriented micro-workflow runner.
+`v0.4.1-pre.0`: execution-repair pre-release with deterministic baseline, corrected AES-CTR metadata language, stratified TDA outputs, standardized distance metrics, object-oriented segmented workflow, 64-replicate `ripser` evidence, related-work manuscript section, and failure-safe external-randomness status reporting.
