@@ -8,11 +8,22 @@
 | `condition` | experimental condition |
 | `replicate` | replicate number |
 | `master_seed` | top-level seed |
-| `algorithm` | AES, Ascon, OS CSPRNG, LCG, xorshift, or DES/TDEA legacy |
-| `mode` | cipher mode or generator mode |
+| `algorithm` | AES, SHA-256 expansion, OS CSPRNG, LCG, xorshift, Ascon extension, or DES/TDEA legacy comparator |
+| `mode` | cipher mode, expansion mode, or generator mode |
 | `bytes` | stream length |
-| `path` | local stream path |
+| `path` | stream path within the generated artifact tree |
 | `sha256` | stream file digest |
+
+## Active configured conditions
+
+| Condition | Meaning |
+|---|---|
+| `aes128_ctr_xor_deterministic_plaintext` | AES-128 CTR output under deterministic plaintext generation |
+| `aes128_ctr_keystream_zero_plaintext` | AES-128 CTR keystream condition generated from zero plaintext |
+| `sha256_seeded_baseline` | deterministic SHA-256 expansion baseline used for reproducible baseline-distance calculations |
+| `os_csprng` | operating-system cryptographic RNG output used as a non-deterministic sensitivity condition |
+| `lcg_weak` | linear congruential generator weak-control output |
+| `xorshift32_weak` | xorshift32 weak-control output |
 
 ## Embedding manifest
 
@@ -21,10 +32,10 @@
 | `embedding_id` | unique embedding identifier |
 | `stream_id` | source stream |
 | `condition` | experimental condition |
-| `embedding_name` | embedding transform |
-| `dimension` | embedding dimension |
-| `stride` | byte stride |
-| `sample_points` | number of points retained |
+| `embedding_name` | embedding transform, such as `byte_pair_2d`, `sliding_window_8d`, or explicitly configured `cubical_image_2d` |
+| `dimension` | embedding dimension or cubical image side parameter, depending on embedding type |
+| `stride` | byte stride where applicable |
+| `sample_points` | number of points retained for point-cloud embeddings |
 | `path` | local `.npy` path |
 
 ## TDA feature table
@@ -44,17 +55,44 @@
 | `lifetime_max` | maximum finite lifetime |
 | `persistence_entropy` | entropy of positive finite lifetimes |
 
+## TDA backend summary table
+
+| Field | Meaning |
+|---|---|
+| `backend` | TDA backend represented in the feature table |
+| `embedding_name` | embedding transform |
+| `homology_dim` | homology dimension |
+| `row_count` | number of feature rows represented by the backend, embedding, and homology-dimension stratum |
+
+## TDA feature summary table
+
+| Field | Meaning |
+|---|---|
+| `condition` | experimental condition |
+| `backend` | TDA backend |
+| `embedding_name` | embedding transform |
+| `homology_dim` | homology dimension |
+| feature summary statistics | condition-level summaries of interval, lifetime, entropy, or related feature columns |
+
 ## TDA distance-to-baseline table
 
 | Field | Meaning |
 |---|---|
 | `stream_id` | source stream identifier for stream-level distance row |
 | `condition` | experimental condition |
-| `baseline_condition` | reference condition used to compute centroid, usually `os_csprng` |
+| `baseline_condition` | reference condition used to compute centroid; `v0.4.1-pre.0` uses `sha256_seeded_baseline` |
 | `backend` | TDA backend |
 | `embedding_name` | embedding transform |
 | `homology_dim` | homology dimension |
 | `euclidean_feature_distance` | Euclidean distance between the stream feature vector and the baseline-condition centroid within the same backend, embedding, and homology dimension |
+
+## Internal randomness-test table
+
+| Field | Meaning |
+|---|---|
+| `stream_id` | source stream identifier |
+| `condition` | experimental condition |
+| randomness-test columns | internal statistical diagnostics computed by `scripts/03_randomness_tests.py` |
 
 ## External randomness-test table
 
