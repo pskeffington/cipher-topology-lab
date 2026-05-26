@@ -1,0 +1,21 @@
+% ************************************************************
+% RELATED WORK
+% ************************************************************
+
+\section{Related Work}
+
+\subsection{Statistical randomness testing for cryptographic and random-number-generator output}
+
+Empirical evaluation of random and pseudorandom output commonly begins with statistical test batteries. NIST SP 800-22 provides a widely used statistical test suite for random and pseudorandom number generators intended for cryptographic applications \citep{nist2010sp80022}. Diehard, Dieharder, and TestU01 represent related empirical traditions in which generated streams are subjected to multiple statistical tests rather than judged by any single statistic \citep{marsaglia1995diehard,brown2018dieharder,lecuyer2007testu01}. These suites are useful for identifying detectable regularities in generated output, but they are not equivalent to cryptanalytic security proofs. The present study follows this diagnostic tradition while adding persistent-homology summaries as an auxiliary layer rather than replacing established statistical batteries.
+
+\subsection{Persistent homology and TDA as multiscale feature extraction}
+
+Persistent homology provides a multiscale framework for summarizing the evolution of topological features across a filtration. Foundational work by \citet{edelsbrunner2002topological} formalized topological persistence, and \citet{zomorodian2005computing} developed computational methods for persistent homology. In applied topological data analysis, these summaries are often interpreted as feature-extraction tools for point clouds, images, networks, and other structured data \citep{carlsson2009topology}. The current pipeline uses this feature-extraction perspective: byte streams are transformed into point clouds, persistent-homology features are computed, and the resulting summaries are compared across controlled stream-generation conditions.
+
+\subsection{TDA for model-generated or random structures and positive-control discrimination}
+
+A useful parallel for the present study is the use of persistent homology to compare model-generated structures. For example, persistent homology has been used to distinguish complex networks with different structural properties, including random and scale-free network models \citep{horak2009persistent}. This logic is similar to the positive-control design used here. The objective is not to infer semantic meaning from an individual barcode, but to test whether streams produced under known generation mechanisms produce reproducibly different topological summaries. In the current 64-replicate run, this design is most clearly supported by the LCG weak-control condition, which separates from the SHA-256 seeded baseline under byte-pair H0 summaries.
+
+\subsection{Limits of empirical diagnostics versus cryptographic randomness and certification}
+
+Cryptographic pseudorandomness is stronger than empirical randomness-test performance. Theoretical notions such as computational indistinguishability and next-bit unpredictability define security in terms of efficient adversaries rather than finite batteries of empirical tests \citep{yao1982theory}. Consequently, neither statistical tests nor topological summaries can certify that a cipher output is secure or truly random. The role of the present pipeline is therefore diagnostic and comparative. A topological feature may identify structure in a weak control, but failure to separate AES-CTR output from a deterministic baseline should not be interpreted as proof of AES security. This boundary is central to the manuscript's claim-control rule.
