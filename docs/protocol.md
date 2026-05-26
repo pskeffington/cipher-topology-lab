@@ -1,41 +1,46 @@
-# Protocol v0.1.0-pre.0
+# Protocol v0.4.1-pre.0
 
 ## Objective
 
-Evaluate whether persistent-homology summaries of ciphertext-derived point clouds provide an auxiliary diagnostic for distinguishing standard symmetric-cipher output from structured or weak control outputs.
+Evaluate whether persistent-homology summaries of ciphertext-derived point clouds provide an auxiliary diagnostic for distinguishing standard symmetric-cipher output from structured deterministic controls and weak-generator positive controls.
 
 ## Primary research question
 
-Can persistent-homology features distinguish structured or weakened ciphertext-generation conditions from standard AES and Ascon ciphertext outputs, and how do these topological diagnostics compare with conventional statistical randomness-test batteries?
+Can persistent-homology features distinguish structured or weakened ciphertext-generation conditions from standard deterministic cipher-output baselines, and how do these topological diagnostics compare with conventional statistical randomness-test batteries?
 
-## Initial conditions
+## Configured conditions
 
 | Condition | Description | Role |
 |---|---|---|
-| `aes128_ctr_random_plaintext` | AES-128 in CTR mode over random plaintext | modern cipher baseline |
-| `aes128_ctr_zero_plaintext` | AES-128 in CTR mode over zero plaintext | controlled AES keystream condition |
-| `os_csprng` | operating-system cryptographic RNG output | random baseline |
+| `aes128_ctr_xor_deterministic_plaintext` | AES-128 CTR output produced under deterministic plaintext generation | modern cipher condition with reproducible structured plaintext input |
+| `aes128_ctr_keystream_zero_plaintext` | AES-128 CTR keystream obtained by encrypting zero plaintext | controlled AES keystream condition |
+| `sha256_seeded_baseline` | deterministic SHA-256 expansion from seeded inputs | primary reproducibility baseline |
+| `os_csprng` | operating-system cryptographic RNG output | non-deterministic sensitivity baseline |
 | `lcg_weak` | linear congruential generator output | weak positive control |
 | `xorshift32_weak` | xorshift32 output | weak positive control |
 
-Ascon should be added in `v0.2.0` using a pinned reference implementation or reproducible package. DES/TDEA should be added only as a deprecated legacy control.
+Ascon remains a planned lightweight-cryptography comparator. DES/TDEA should be added only as a deprecated legacy control, not as a modern security target.
 
 ## Data-generation principle
 
-Every stream must be reproducible from condition name, replicate index, master seed, key, nonce, plaintext pattern, generator parameters, and software version.
+Every reproducible stream must be traceable from condition name, replicate index, master seed, key or seed material, nonce or counter initialization where applicable, plaintext pattern or generator parameters, output byte count, software version, and SHA-256 digest. The OS CSPRNG condition is retained as a sensitivity condition and is not the primary reproducibility baseline.
 
 ## Embedding methods
 
-The initial release uses byte-pair embedding and sliding-window embedding. Later extensions should add cubical encodings from ciphertext reshaped as grayscale arrays.
+The current configured embeddings are `byte_pair_2d` and `sliding_window_8d`. The codebase also contains a `cubical_image_2d` embedding path for GUDHI cubical-complex experiments when explicitly included in a config.
 
 ## TDA features
 
-Initial features include H0/H1 interval counts, finite interval counts, finite lifetime mean, finite lifetime maximum, and persistence entropy.
+Core features include interval counts, finite interval counts, finite lifetime mean, finite lifetime standard deviation, finite lifetime maximum, and persistence entropy for configured homology dimensions.
 
-## Development fallback rule
+## Backend rule
 
-The codebase includes a fallback threshold-graph backend for smoke testing when optional persistent-homology libraries are unavailable. This backend is not manuscript-grade persistent homology and must not be used as evidence for publication claims. Manuscript evidence must be generated with a true persistent-homology backend such as ripser or GUDHI.
+Publication-grade evidence must use true persistent-homology backends such as ripser or GUDHI. Any fallback or development backend is diagnostic only and must not be used as manuscript evidence.
+
+## Baseline-distance rule
+
+Distance-to-baseline tables must identify the configured `baseline_condition`. For `v0.4.1-pre.0`, that baseline is `sha256_seeded_baseline`; OS CSPRNG is a separate non-deterministic sensitivity condition.
 
 ## Interpretation rule
 
-This project does not certify cipher security. It tests whether topological summaries add diagnostic information relative to conventional tests and known weak controls.
+This project does not certify cipher security and does not claim to break AES, Ascon, DES, or any standardized cipher. It tests whether topological summaries add diagnostic information relative to conventional tests and known weak controls.
