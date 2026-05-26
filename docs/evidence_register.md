@@ -1,6 +1,6 @@
 # Evidence Register
 
-Generated: `2026-05-26T02:44:07+00:00`
+Generated: `2026-05-26T02:53:59+00:00`
 
 ## Configuration
 
@@ -15,29 +15,29 @@ Generated: `2026-05-26T02:44:07+00:00`
 ## Validation
 
 - Command: `/Users/null/Documents/GitHub/cipher-topology-lab/.venv/bin/python scripts/08_validate_artifact_coherence.py --config configs/experiment_64rep.json`
-- Status: `PASS`
+- Status: `FAIL`
 
 ```text
-Validated artifact coherence: conditions=6, embeddings=2, homology_dims=[0, 1], replicates=64, baseline=sha256_seeded_baseline.
+Missing required artifact: data/interim/embedding_manifest.csv
 ```
 
 ## Registered artifacts
 
 | Path | Status | Rows |
 | --- | --- | --- |
-| `data/raw/stream_manifest.csv` | present | 384 |
-| `data/interim/embedding_manifest.csv` | present | 768 |
-| `data/processed/tda_features.csv` | present | 1536 |
-| `data/processed/randomness_tests_internal.csv` | present | 384 |
+| `data/raw/stream_manifest.csv` | present | 6 |
+| `data/interim/embedding_manifest.csv` | missing | NA |
+| `data/processed/tda_features.csv` | missing | NA |
+| `data/processed/randomness_tests_internal.csv` | missing | NA |
 | `data/processed/external_randomness_tests.csv` | present | 0 |
-| `results/tables/tda_backend_summary.csv` | present | 4 |
-| `results/tables/tda_feature_summary.csv` | present | 24 |
-| `results/tables/tda_distance_to_sha256_seeded_baseline.csv` | present | 1536 |
+| `results/tables/tda_backend_summary.csv` | missing | NA |
+| `results/tables/tda_feature_summary.csv` | missing | NA |
+| `results/tables/tda_distance_to_sha256_seeded_baseline.csv` | missing | NA |
 
 ## Backend status
 
-- Observed TDA backends: `ripser`
-- Fallback backend detected: `False`
+- Observed TDA backends: `none detected`
+- Fallback backend detected: `unknown`
 - Manuscript-grade rule: use only true persistent-homology backend outputs for evidentiary claims. Fallback outputs are diagnostic only.
 
 ## External randomness status
@@ -48,26 +48,12 @@ Validated artifact coherence: conditions=6, embeddings=2, homology_dims=[0, 1], 
 
 ## Registered figures
 
-| Figure path |
-| --- |
-| `results/figures/h0_persistence_entropy__ripser__byte_pair_2d.png` |
-| `results/figures/h0_persistence_entropy__ripser__sliding_window_8d.png` |
-| `results/figures/h1_persistence_entropy__ripser__byte_pair_2d.png` |
-| `results/figures/h1_persistence_entropy__ripser__sliding_window_8d.png` |
-| `results/figures/tda_distance_to_sha256_seeded_baseline__ripser__byte_pair_2d__h0__raw__nonbaseline.png` |
-| `results/figures/tda_distance_to_sha256_seeded_baseline__ripser__byte_pair_2d__h0__zscored__nonbaseline.png` |
-| `results/figures/tda_distance_to_sha256_seeded_baseline__ripser__byte_pair_2d__h1__raw__nonbaseline.png` |
-| `results/figures/tda_distance_to_sha256_seeded_baseline__ripser__byte_pair_2d__h1__zscored__nonbaseline.png` |
-| `results/figures/tda_distance_to_sha256_seeded_baseline__ripser__sliding_window_8d__h0__raw__nonbaseline.png` |
-| `results/figures/tda_distance_to_sha256_seeded_baseline__ripser__sliding_window_8d__h0__zscored__nonbaseline.png` |
-| `results/figures/tda_distance_to_sha256_seeded_baseline__ripser__sliding_window_8d__h1__raw__nonbaseline.png` |
-| `results/figures/tda_distance_to_sha256_seeded_baseline__ripser__sliding_window_8d__h1__zscored__nonbaseline.png` |
+No figures detected.
 
 ## Registered logs
 
 | Log path |
 | --- |
-| `results/logs/figure_notes.md` |
 | `results/logs/segmented_run_report.md` |
 
 ## Claim-control rule
