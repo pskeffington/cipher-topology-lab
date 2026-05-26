@@ -8,23 +8,23 @@ The project does **not** claim to break AES, Ascon, DES, or any standardized cip
 
 ## Research question
 
-Can persistent-homology features distinguish structured or weakened ciphertext-generation conditions from standard AES and Ascon ciphertext outputs, and how do these topological diagnostics compare with conventional statistical randomness-test batteries?
+Can persistent-homology features distinguish structured or weakened ciphertext-generation conditions from deterministic cryptographic baselines and weak controls, and how do these topological diagnostics compare with conventional statistical randomness-test batteries?
 
 ## Primary contribution
 
 A reproducible pipeline that:
 
-1. Generates ciphertext streams under controlled conditions.
-2. Converts bitstreams and byte streams into point clouds or cubical-complex inputs.
+1. Generates ciphertext and generator streams under controlled conditions.
+2. Converts bitstreams and byte streams into point clouds or explicitly configured cubical-complex inputs.
 3. Computes persistent-homology features.
 4. Benchmarks topological summaries against conventional randomness diagnostics.
-5. Produces manuscript-ready tables, figures, and audit logs.
+5. Produces manuscript-ready tables, figures, validation logs, and an evidence register.
 
 ## Cipher scope
 
 | Class | Role |
 |---|---|
-| AES-128 CTR | Primary modern block-cipher stream baseline |
+| AES-128 CTR | Primary modern block-cipher stream condition |
 | SHA-256 expansion | Deterministic reproducibility baseline |
 | OS CSPRNG | Non-deterministic sensitivity baseline |
 | LCG / xorshift | Weak-generator positive controls |
@@ -41,6 +41,9 @@ No restricted datasets are required. The complete primary dataset is generated l
 
 ```text
 cipher-topology-lab/
+├── configs/
+│   ├── experiment_v0.json
+│   └── smoke_test.json
 ├── data/
 │   ├── raw/
 │   ├── interim/
@@ -48,6 +51,7 @@ cipher-topology-lab/
 ├── docs/
 │   ├── protocol.md
 │   ├── data_dictionary.md
+│   ├── evidence_register.md
 │   └── publication_plan.md
 ├── manuscript/
 │   ├── main.tex
@@ -65,7 +69,12 @@ cipher-topology-lab/
 │   ├── 04_analyze_results.py
 │   ├── 05_export_randomness_inputs.py
 │   ├── 06_parse_external_results.py
-│   └── 07_validate_tda_backend.py
+│   ├── 07_validate_tda_backend.py
+│   ├── 08_validate_artifact_coherence.py
+│   ├── 09_build_evidence_register.py
+│   ├── 09_validate_artifact_consistency.py
+│   ├── 10_effect_size_tables.py
+│   └── 11_run_micro_workflow.py
 ├── src/
 │   └── ciphertopology/
 ├── tests/
@@ -75,6 +84,57 @@ cipher-topology-lab/
 ├── Makefile
 └── README.md
 ```
+
+## One-command micro workflow
+
+After setup, the object-oriented workflow runner can execute the whole segmented pipeline from a terminal:
+
+```bash
+make setup
+make micro-smoke
+```
+
+For the full configured analysis:
+
+```bash
+make setup
+make micro-full
+```
+
+The direct Python form is:
+
+```bash
+python scripts/11_run_micro_workflow.py --config configs/smoke_test.json --allow-fallback
+```
+
+## Segmented micro-stages
+
+The micro workflow is built from small stage objects. Any stage or ordered subset can be run directly:
+
+```bash
+python scripts/11_run_micro_workflow.py --config configs/experiment_v0.json --stage generate embed features
+python scripts/11_run_micro_workflow.py --config configs/experiment_v0.json --stage randomness analysis coherence consistency effects evidence
+```
+
+Available stages:
+
+```text
+clean
+generate
+embed
+features
+randomness
+analysis
+export
+external-parse
+coherence
+consistency
+effects
+evidence
+manuscript
+```
+
+Use `--parse-external` to parse external randomness-test outputs after export, `--allow-fallback` for engineering runs that permit fallback TDA backends, and `--build-manuscript` to run `latexmk` after evidence generation.
 
 ## Minimal workflow
 
@@ -100,4 +160,4 @@ This project is suitable for an applied cryptography, cybersecurity engineering,
 
 ## Status
 
-`v0.4.1-pre.0`: execution-repair pre-release with deterministic baseline, corrected AES-CTR metadata language, stratified TDA outputs, and standardized distance metrics.
+`v0.4.1-pre.0`: execution-repair pre-release with deterministic baseline, corrected AES-CTR metadata language, stratified TDA outputs, standardized distance metrics, and an object-oriented micro-workflow runner.
