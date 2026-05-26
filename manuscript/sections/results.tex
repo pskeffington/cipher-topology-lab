@@ -4,7 +4,7 @@
 
 \section{Results}
 
-Results will be inserted after the first full reproducible run. The primary tables will report stream-level metadata, conventional randomness diagnostics, topological feature summaries, and between-condition comparisons.
+Results will be finalized after the next full reproducible run. The primary tables will report stream-level metadata, conventional randomness diagnostics, topological feature summaries, backend status, distance-to-baseline summaries, and between-condition comparisons. All reported claims should trace to the generated evidence register and artifact-coherence validation output.
 
 \begin{table}[htbp]
 \centering
@@ -14,10 +14,10 @@ Results will be inserted after the first full reproducible run. The primary tabl
 \toprule
 Condition & Embedding & Homology & Replicates & Intervals & Finite Intervals & Mean Lifetime & Max Lifetime & Entropy \\
 \midrule
-AES-128 & byte-pair & H0/H1 & -- & -- & -- & -- & -- & -- \\
-Ascon & byte-pair & H0/H1 & -- & -- & -- & -- & -- & -- \\
-OS CSPRNG & byte-pair & H0/H1 & -- & -- & -- & -- & -- & -- \\
-Weak controls & byte-pair & H0/H1 & -- & -- & -- & -- & -- & -- \\
+AES-128 CTR deterministic & byte-pair / sliding-window & H0/H1 & -- & -- & -- & -- & -- & -- \\
+SHA-256 seeded baseline & byte-pair / sliding-window & H0/H1 & -- & -- & -- & -- & -- & -- \\
+OS CSPRNG sensitivity & byte-pair / sliding-window & H0/H1 & -- & -- & -- & -- & -- & -- \\
+Weak controls & byte-pair / sliding-window & H0/H1 & -- & -- & -- & -- & -- & -- \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
