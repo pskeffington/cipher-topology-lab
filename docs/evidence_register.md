@@ -1,6 +1,6 @@
 # Evidence Register
 
-Generated: `2026-05-26T02:14:17+00:00`
+Generated: `2026-05-26T02:44:07+00:00`
 
 ## Configuration
 
@@ -29,7 +29,7 @@ Validated artifact coherence: conditions=6, embeddings=2, homology_dims=[0, 1], 
 | `data/interim/embedding_manifest.csv` | present | 768 |
 | `data/processed/tda_features.csv` | present | 1536 |
 | `data/processed/randomness_tests_internal.csv` | present | 384 |
-| `data/processed/external_randomness_tests.csv` | missing | NA |
+| `data/processed/external_randomness_tests.csv` | present | 0 |
 | `results/tables/tda_backend_summary.csv` | present | 4 |
 | `results/tables/tda_feature_summary.csv` | present | 24 |
 | `results/tables/tda_distance_to_sha256_seeded_baseline.csv` | present | 1536 |
@@ -43,7 +43,7 @@ Validated artifact coherence: conditions=6, embeddings=2, homology_dims=[0, 1], 
 ## External randomness status
 
 - External randomness table: `data/processed/external_randomness_tests.csv`
-- Rows: `missing`
+- Rows: `0`
 - Populated: `False`
 
 ## Registered figures
