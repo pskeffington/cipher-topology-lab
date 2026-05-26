@@ -15,12 +15,16 @@ data/processed/*
 results/figures/*
 results/tables/*
 results/logs/*
+external_tests/inputs/*
+external_tests/results/*
 !data/raw/.gitkeep
 !data/interim/.gitkeep
 !data/processed/.gitkeep
 !results/figures/.gitkeep
 !results/tables/.gitkeep
 !results/logs/.gitkeep
+!data/processed/external_randomness_tests.csv
+!results/logs/external_randomness_status.md
 
 # LaTeX
 *.aux
