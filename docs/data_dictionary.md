@@ -25,6 +25,10 @@
 | `lcg_weak` | linear congruential generator weak-control output |
 | `xorshift32_weak` | xorshift32 weak-control output |
 
+## Manuscript evidence scale
+
+The current manuscript evidence configuration is `configs/experiment_64rep.json`. It uses 64 replicates across six conditions, producing 384 streams. With two embeddings and H0/H1 summaries, the current evidence run produces 768 embeddings and 1,536 TDA feature rows.
+
 ## Embedding manifest
 
 | Field | Meaning |
@@ -86,6 +90,25 @@
 | `homology_dim` | homology dimension |
 | `euclidean_feature_distance` | Euclidean distance between the stream feature vector and the baseline-condition centroid within the same backend, embedding, and homology dimension |
 
+## Effect-size tables
+
+| Field | Meaning |
+|---|---|
+| `table` | effect family, such as `persistence_entropy` or `distance_to_sha256_seeded_baseline` |
+| `backend` | TDA backend |
+| `embedding_name` | embedding transform |
+| `homology_dim` | homology dimension |
+| `condition` | comparison condition |
+| `baseline_condition` | configured baseline condition |
+| `n` | number of comparison rows |
+| `baseline_n` | number of baseline rows |
+| `median` | comparison-condition median |
+| `baseline_median` | baseline-condition median |
+| `mean` | comparison-condition mean |
+| `baseline_mean` | baseline-condition mean |
+| `cliffs_delta` | Cliff's delta effect size comparing condition against baseline |
+| `mann_whitney_p` | two-sided Mann--Whitney p value |
+
 ## Internal randomness-test table
 
 | Field | Meaning |
@@ -106,6 +129,18 @@
 | `psamples` | p-value sample count where reported |
 | `p_value` | reported p-value |
 | `assessment` | external suite assessment label |
+
+The external randomness-test table may be schema-only when external testing is unavailable. In that case, consult `results/logs/external_randomness_status.md` and the evidence register before making any claim about external randomness testing.
+
+## External randomness status report
+
+| Field or section | Meaning |
+|---|---|
+| `Status` | external runner status, such as `PASS`, `FAIL`, or `UNAVAILABLE` |
+| `Message` | human-readable reason for the status |
+| `Configuration` | manifest, input directory, result directory, parsed output path, executable, and test id |
+| `Selected targets` | replicate-zero exported input files selected for the external-test subset |
+| `Test results` | per-target command output status when tests are run |
 
 ## External export manifest
 
