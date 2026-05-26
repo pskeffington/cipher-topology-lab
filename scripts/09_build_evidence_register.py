@@ -60,6 +60,20 @@ def sorted_paths(pattern: str) -> list[Path]:
     return sorted(Path().glob(pattern), key=lambda item: str(item))
 
 
+def read_external_status(path: Path) -> tuple[str, str]:
+    if not path.exists():
+        return "missing", "No external randomness status report found."
+    text = path.read_text(encoding="utf-8")
+    status = "unknown"
+    message = ""
+    for line in text.splitlines():
+        if line.startswith("Status:"):
+            status = line.replace("Status:", "", 1).strip().strip("`")
+        if line.startswith("Message:"):
+            message = line.replace("Message:", "", 1).strip().strip("`")
+    return status, message
+
+
 def build_register(config_path: str, output_path: Path) -> str:
     config = read_json(config_path)
     baseline_condition = config.get("baseline_condition", "")
@@ -104,6 +118,8 @@ def build_register(config_path: str, output_path: Path) -> str:
     external_path = Path("data/processed/external_randomness_tests.csv")
     external_rows = csv_row_count(external_path)
     external_populated = external_rows is not None and external_rows > 0
+    external_status_path = Path("results/logs/external_randomness_status.md")
+    external_status, external_message = read_external_status(external_status_path)
 
     content = f"""# Evidence Register
 
@@ -143,6 +159,9 @@ Generated: `{generated_at}`
 - External randomness table: `{external_path}`
 - Rows: `{external_rows if external_rows is not None else 'missing'}`
 - Populated: `{external_populated}`
+- Status report: `{external_status_path}`
+- External runner status: `{external_status}`
+- External runner message: `{external_message}`
 
 ## Registered figures
 
