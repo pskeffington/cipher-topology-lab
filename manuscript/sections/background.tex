@@ -8,10 +8,14 @@
 
 AES is specified in FIPS 197 as AES-128, AES-192, and AES-256, each using a 128-bit block size and key lengths corresponding to the numerical suffix. Randomness testing is often used as a preliminary diagnostic for cryptographic outputs, but statistical testing cannot substitute for cryptanalysis. This distinction is central to the design of the present study. The tests and topological summaries considered here are diagnostic instruments, not security proofs.
 
-\subsection{Ascon and lightweight cryptography}
+\subsection{Reproducible baselines and sensitivity conditions}
 
-Ascon provides a modern lightweight-cryptography comparison point because it was selected by NIST for constrained devices and standardized for authenticated encryption, hash, and extendable-output functions. Its inclusion broadens the study beyond AES while keeping the analysis focused on current symmetric cryptography.
+The current pre-release design separates deterministic reproducibility from non-deterministic sensitivity analysis. A seeded SHA-256 expansion condition serves as the primary reproducibility baseline for baseline-distance calculations because it can be regenerated exactly from documented inputs. Operating-system cryptographic random output is retained as a sensitivity condition because it represents high-quality platform randomness but is not intended to be exactly reproducible across independent runs.
+
+\subsection{Lightweight and legacy cipher extensions}
+
+Ascon provides a planned lightweight-cryptography comparison point because it was selected by NIST for constrained devices and standardized for authenticated encryption, hash, and extendable-output functions. DES and TDEA are reserved for deprecated legacy-comparator experiments only. These extensions broaden the roadmap without changing the current AES-CTR, SHA-256 baseline, OS CSPRNG sensitivity, and weak-control pre-release design.
 
 \subsection{Persistent homology}
 
-Persistent homology studies how topological features such as connected components and holes are born, persist, and die across a filtration. In the present study, byte streams are converted to point clouds or cubical-complex inputs, and persistent-homology features are computed from those representations. The resulting features are interpreted as empirical diagnostics of structure in the transformed output stream.
+Persistent homology studies how topological features such as connected components and holes are born, persist, and die across a filtration. In the present study, byte streams are converted to point clouds or explicitly configured cubical-complex inputs, and persistent-homology features are computed from those representations. The resulting features are interpreted as empirical diagnostics of structure in the transformed output stream.
