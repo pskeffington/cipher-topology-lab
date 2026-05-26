@@ -42,3 +42,6 @@ manuscript/main.pdf
 
 # OS
 .DS_Store
+
+# Release bundles
+release_artifacts/
