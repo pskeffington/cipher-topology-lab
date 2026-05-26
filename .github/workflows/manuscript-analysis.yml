@@ -64,7 +64,7 @@ jobs:
         run: python scripts/09_validate_artifact_consistency.py --config ${{ github.event.inputs.config }}
 
       - name: Build effect-size tables
-        run: python scripts/10_effect_size_tables.py
+        run: python scripts/10_effect_size_tables.py --config ${{ github.event.inputs.config }}
 
       - name: Build evidence register
         run: python scripts/09_build_evidence_register.py --config ${{ github.event.inputs.config }} --output docs/evidence_register.md
