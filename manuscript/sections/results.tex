@@ -59,6 +59,10 @@ LCG weak control & Distance to baseline & 0.9834 & $8.35 \times 10^{-22}$ \\
 \end{adjustbox}
 \end{table}
 
+\subsection{External randomness-test status}
+
+The external randomness-test pathway exported replicate-zero streams for all six configured conditions at 8 MiB per file and generated a schema-valid external randomness table. Dieharder was not available on the local execution path used for this run, so no external Dieharder rows were populated. The evidence register therefore records the external runner status as \texttt{UNAVAILABLE}, with the message \texttt{Dieharder executable not found on PATH: dieharder}. These records establish that external testing was attempted and audited, but they do not constitute completed external randomness-test evidence.
+
 \subsection{Interpretation of the internal run}
 
 Taken together, the 64-replicate internal run supports the pipeline as a positive-control diagnostic for at least one weak generator. The LCG condition was consistently separated from the SHA-256 seeded baseline under byte-pair H0 summaries, while AES-CTR deterministic-output conditions, OS CSPRNG output, and xorshift32 did not show comparable separation under the current embeddings and feature set. These findings should be interpreted as diagnostic evidence about the tested representations and summaries, not as a cryptanalytic claim or as proof of security for any cipher or random source.
