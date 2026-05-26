@@ -6,20 +6,20 @@
 
 \subsection{Study design}
 
-The study uses a controlled simulation design. All streams are generated locally from documented settings. The primary modern-cipher conditions are AES-128 and Ascon. Operating-system cryptographic random output is used as a random baseline, while LCG and xorshift outputs are used as weak-generator positive controls. DES and TDEA are reserved for a deprecated legacy-control extension and are not treated as modern secure baselines.
+The study uses a controlled simulation design. All streams are generated locally from documented settings. The current pre-release conditions include AES-128 CTR deterministic-output variants, a seeded SHA-256 expansion baseline for reproducible comparison, operating-system cryptographic random output as a non-deterministic sensitivity condition, and LCG and xorshift outputs as weak-generator positive controls. Ascon is reserved for a planned lightweight-cryptography extension. DES and TDEA are reserved for a deprecated legacy-control extension and are not treated as modern secure baselines.
 
 \subsection{Stream generation}
 
-For each condition, the pipeline records the algorithm, mode, replicate index, master seed, key material where applicable, nonce or initialization value where applicable, plaintext pattern, stream length, software version, and SHA-256 digest of the generated stream. This manifest-based design permits exact auditing of generated data and derived features.
+For each condition, the pipeline records the algorithm, mode, replicate index, master seed, key material where applicable, nonce or initialization value where applicable, plaintext pattern or generator parameters, stream length, software version, and SHA-256 digest of the generated stream. This manifest-based design permits exact auditing of generated data and derived features. The deterministic SHA-256 expansion condition is used as the primary reproducibility baseline for distance-to-baseline analyses, while OS CSPRNG output is retained as a sensitivity condition because it is not exactly reproducible across runs.
 
 \subsection{Embedding}
 
-The initial analysis uses two embeddings. The byte-pair embedding maps successive byte pairs to two-dimensional points normalized to the unit square. The sliding-window embedding maps overlapping byte windows to fixed-dimensional vectors. Cubical encodings are treated as a planned extension in the current roadmap and will reshape byte streams into grayscale arrays before cubical persistence is computed.
+The configured analysis uses two point-cloud embeddings. The byte-pair embedding maps successive byte pairs to two-dimensional points normalized to the unit square. The sliding-window embedding maps overlapping byte windows to fixed-dimensional vectors. Cubical encodings are implemented as an explicitly configured extension path and reshape byte streams into grayscale arrays before cubical persistence is computed.
 
 \subsection{Topological features}
 
-Persistent-homology features are computed from each embedded point cloud. The initial feature set includes interval counts, finite interval counts, mean finite lifetime, maximum finite lifetime, and persistence entropy for homology dimensions zero and one. These features summarize connected-component and loop structure across filtration scale. Manuscript-grade results require a true persistent-homology backend such as ripser or GUDHI; development fallback outputs are restricted to smoke testing and are not used for publication claims.
+Persistent-homology features are computed from each embedded point cloud or cubical input. The feature set includes interval counts, finite interval counts, mean finite lifetime, finite-lifetime standard deviation, maximum finite lifetime, and persistence entropy for homology dimensions zero and one. These features summarize connected-component and loop structure across filtration scale. Manuscript-grade results require a true persistent-homology backend such as ripser or GUDHI; development fallback outputs are restricted to smoke testing and are not used for publication claims.
 
 \subsection{Conventional diagnostics}
 
-The repository includes a lightweight internal monobit-frequency diagnostic for development. External randomness-test integration exports generated streams into binary files with SHA-256 digests and provides parsing support for Dieharder-style result tables. NIST SP 800-22 and Dieharder outputs are treated as conventional statistical diagnostics and are compared with topological summaries rather than interpreted as proof of cipher security.
+The repository includes lightweight internal randomness diagnostics for development and reproducibility checks. External randomness-test integration exports generated streams into binary files with SHA-256 digests and provides parsing support for Dieharder-style result tables. NIST SP 800-22 and Dieharder outputs are treated as conventional statistical diagnostics and are compared with topological summaries rather than interpreted as proof of cipher security.
