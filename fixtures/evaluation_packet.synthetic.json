@@ -1,0 +1,31 @@
+{
+  "evaluation_id": "eval_0001",
+  "experiment_config_id": "cfg_0001",
+  "source_stream_ids": [
+    "src_stream_0001"
+  ],
+  "feature_object_ids": [
+    "feature_0001"
+  ],
+  "diagnostic_result_ids": [
+    "diag_0001"
+  ],
+  "baseline_ids": [
+    "baseline_0001"
+  ],
+  "claim_boundary_id": "claim_boundary_0001",
+  "reproducibility_note_id": "repro_note_0001",
+  "supported_claims": [
+    "reproducible_diagnostic_workflow_defined"
+  ],
+  "unsupported_claims": [
+    "operational_capability_established"
+  ],
+  "required_future_validation": [
+    "independent_rerun",
+    "expanded_baseline_review"
+  ],
+  "review_status": "reviewed",
+  "public_safety_boundary": "synthetic",
+  "ml_readiness": "schema_ready"
+}
