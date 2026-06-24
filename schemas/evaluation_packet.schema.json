@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/pskeffington/cipher-topology-lab/schemas/evaluation_packet.schema.json",
+  "title": "Evaluation Packet",
+  "description": "Minimum viable evaluation-packet object for reproducibility, diagnostic result review, baseline comparison, and claim-boundary control.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "evaluation_id",
+    "experiment_config_id",
+    "source_stream_ids",
+    "feature_object_ids",
+    "diagnostic_result_ids",
+    "baseline_ids",
+    "claim_boundary_id",
+    "reproducibility_note_id",
+    "review_status",
+    "public_safety_boundary"
+  ],
+  "properties": {
+    "evaluation_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "experiment_config_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_stream_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "feature_object_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "diagnostic_result_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "baseline_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "claim_boundary_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "reproducibility_note_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "supported_claims": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "unsupported_claims": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "required_future_validation": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "review_status": {
+      "type": "string",
+      "enum": [
+        "not_started",
+        "draft",
+        "requires_review",
+        "reviewed",
+        "approved",
+        "rejected",
+        "superseded"
+      ]
+    },
+    "public_safety_boundary": {
+      "type": "string",
+      "enum": [
+        "synthetic",
+        "public_safe",
+        "internal_review",
+        "restricted"
+      ]
+    },
+    "ml_readiness": {
+      "type": "string",
+      "enum": [
+        "not_ready",
+        "schema_ready",
+        "feature_ready",
+        "validation_ready",
+        "model_ready",
+        "review_gated"
+      ]
+    }
+  }
+}
