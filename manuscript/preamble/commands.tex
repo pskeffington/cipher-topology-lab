@@ -1,0 +1,31 @@
+% ************************************************************
+% SEMANTIC COMMANDS
+% ************************************************************
+
+% Project objects
+\newcommand{\ProjectTitle}{Topological Diagnostics of Symmetric-Cipher Output Randomness}
+\newcommand{\AuthorName}{Paul A. Skeffington}
+\newcommand{\PrimaryBaseline}{\texttt{sha256\_seeded\_baseline}}
+\newcommand{\PrimaryBackend}{\texttt{ripser}}
+
+% Conditions
+\newcommand{\AESDet}{\texttt{aes128\_ctr\_xor\_deterministic\_plaintext}}
+\newcommand{\AESZero}{\texttt{aes128\_ctr\_keystream\_zero\_plaintext}}
+\newcommand{\OSCSPRNG}{\texttt{os\_csprng}}
+\newcommand{\LCGWeak}{\texttt{lcg\_weak}}
+\newcommand{\XorShiftWeak}{\texttt{xorshift32\_weak}}
+\newcommand{\PeriodicWeak}{\texttt{periodic\_byte\_weak}}
+\newcommand{\BiasedWeak}{\texttt{biased\_byte\_weak}}
+
+% Embeddings
+\newcommand{\BytePair}{\texttt{byte\_pair\_2d}}
+\newcommand{\SlidingWindow}{\texttt{sliding\_window\_8d}}
+
+% Common language guards
+\newcommand{\NoCryptoClaim}{This result is interpreted as diagnostic evidence, not as a cipher break, vulnerability claim, or security certification.}
+\newcommand{\ExternalUnavailable}{External randomness testing was recorded as unavailable because Dieharder was not installed; no completed external randomness comparison is claimed.}
+
+% Evidence-register paths
+\newcommand{\EvidencePrimary}{\texttt{docs/evidence\_register.md}}
+\newcommand{\EvidenceWeakControls}{\texttt{docs/evidence\_register\_weak\_controls.md}}
+\newcommand{\EvidenceSeedRobustness}{\texttt{docs/evidence\_register\_weak\_controls\_seed\_robustness.md}}
