@@ -1,0 +1,12 @@
+% ************************************************************
+% OBJECT-ORIENTED WORKFLOW SCAFFOLD
+% ************************************************************
+
+\subsection{Object-oriented workflow design}
+\label{subsec:object-oriented-workflow}
+
+The implementation is organized as a staged workflow rather than as a single monolithic script. Each stage has a narrow responsibility: cleaning generated artifacts, generating streams, embedding streams, computing topological features, running internal diagnostics, building summaries and figures, exporting external-test inputs, validating coherence, validating consistency, computing effect sizes, building evidence registers, and optionally building the manuscript.
+
+This design mirrors the conceptual objects in the study. Configuration files define experiment objects, stream manifests define generated data objects, embedding manifests define representation objects, TDA feature tables define topological-summary objects, and evidence registers define claim-traceability objects. The workflow therefore separates data generation, representation, feature extraction, validation, and reporting so that a thesis result can be traced from a claim back to a configuration, table, figure, or log.
+
+For thesis purposes, this section should describe the workflow as an audit architecture. The important methodological point is not only that the stages run, but that each stage emits durable artifacts with stable schemas. This permits independent validation of artifact counts, condition labels, replicate counts, backend use, baseline selection, and external-test availability.
