@@ -51,8 +51,10 @@ Run targeted validation scripts after smoke output exists:
 ```bash
 .venv/bin/python scripts/08_validate_artifact_coherence.py --config configs/smoke_test.json
 .venv/bin/python scripts/09_validate_artifact_consistency.py --config configs/smoke_test.json
-.venv/bin/python scripts/09_build_evidence_register.py --config configs/smoke_test.json
+.venv/bin/python scripts/09_build_evidence_register.py --config configs/smoke_test.json --output docs/evidence_register_smoke.md
 ```
+
+The consistency validator uses the active config to infer the baseline-distance table and validates the default feature, backend-summary, and distance-table paths unless explicit paths are supplied.
 
 Do not proceed to 64 replicates until smoke artifact coherence and consistency are understood.
 
@@ -80,10 +82,10 @@ Run:
 .venv/bin/python scripts/08_validate_artifact_coherence.py --config configs/experiment_64rep.json
 .venv/bin/python scripts/09_validate_artifact_consistency.py --config configs/experiment_64rep.json
 .venv/bin/python scripts/10_effect_size_tables.py --config configs/experiment_64rep.json
-.venv/bin/python scripts/09_build_evidence_register.py --config configs/experiment_64rep.json
+.venv/bin/python scripts/09_build_evidence_register.py --config configs/experiment_64rep.json --output docs/evidence_register.md
 ```
 
-The exact script names should be checked against the current CLI options before execution. If script names or flags differ, update this plan rather than improvising untracked commands.
+The evidence-register builder itself also runs the coherence validator and records its pass/fail output. A passing register is necessary but not sufficient; artifact consistency should also be run explicitly before promoting claims.
 
 ## Stage 5 — external randomness status
 
@@ -94,6 +96,12 @@ Run:
 ```
 
 If Dieharder is installed, preserve parsed external rows and logs. If Dieharder is missing, preserve the explicit unavailable status and do not claim external testing is completed.
+
+After external status is written, regenerate the evidence register so it captures the current external-test state:
+
+```bash
+.venv/bin/python scripts/09_build_evidence_register.py --config configs/experiment_64rep.json --output docs/evidence_register.md
+```
 
 ## Stage 6 — reconciliation
 
