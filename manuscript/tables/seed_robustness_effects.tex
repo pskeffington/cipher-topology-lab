@@ -1,0 +1,23 @@
+% ************************************************************
+% SEED-ROBUSTNESS EFFECTS TABLE
+% ************************************************************
+
+\begin{table}[htbp]
+\centering
+\caption{Selected alternate-seed weak-control robustness effects relative to the SHA-256 seeded baseline}
+\label{tab:seed-robustness-effects}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{llllrr}
+\toprule
+Condition & Embedding & Homology & Metric & Cliff's $\delta$ & $p$ value \\
+\midrule
+Biased byte weak control & sliding-window & H1 & Distance to baseline & 1.0000 & $1.71 \times 10^{-22}$ \\
+Periodic byte weak control & byte-pair & H0 & Distance to baseline & 1.0000 & $1.71 \times 10^{-22}$ \\
+Periodic byte weak control & byte-pair & H0 & Persistence entropy & -1.0000 & $1.71 \times 10^{-22}$ \\
+Biased byte weak control & sliding-window & H1 & Persistence entropy & 1.0000 & $5.21 \times 10^{-23}$ \\
+LCG weak control & byte-pair & H0 & Distance to baseline & 0.8838 & $6.50 \times 10^{-18}$ \\
+LCG weak control & byte-pair & H0 & Persistence entropy & 0.8525 & $8.92 \times 10^{-17}$ \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}
