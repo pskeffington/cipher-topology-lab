@@ -3,23 +3,43 @@
 % ************************************************************
 
 \section{Methods}
+\label{sec:methods}
 
 \subsection{Study design}
+\label{subsec:study-design}
 
-The study uses a controlled simulation design. All streams are generated locally from documented settings. The current pre-release conditions include AES-128 CTR deterministic-output variants, a seeded SHA-256 expansion baseline for reproducible comparison, operating-system cryptographic random output as a non-deterministic sensitivity condition, and LCG and xorshift outputs as weak-generator positive controls. Ascon is reserved for a planned lightweight-cryptography extension. DES and TDEA are reserved for a deprecated legacy-control extension and are not treated as modern secure baselines.
+The study uses a controlled simulation design. All streams are generated locally from documented settings. The current evidence base includes AES-128 CTR deterministic-output variants, a seeded SHA-256 expansion baseline for reproducible comparison, operating-system cryptographic random output as a non-deterministic sensitivity condition, LCG and xorshift outputs as weak-generator controls, and deliberately structured periodic and biased byte-stream controls for sensitivity analysis. Ascon is reserved for a planned lightweight-cryptography extension. DES and TDEA are reserved for a deprecated legacy-control extension and are not treated as modern secure baselines.
+
+\subsection{Object-oriented workflow design}
+\label{subsec:object-oriented-workflow}
+
+The implementation is organized as a staged workflow rather than as a single monolithic script. Each stage has a narrow responsibility: cleaning generated artifacts, generating streams, embedding streams, computing topological features, running internal diagnostics, building summaries and figures, exporting external-test inputs, validating coherence, validating consistency, computing effect sizes, building evidence registers, and optionally building the manuscript.
+
+This design mirrors the conceptual objects in the study. Configuration files define experiment objects, stream manifests define generated data objects, embedding manifests define representation objects, TDA feature tables define topological-summary objects, and evidence registers define claim-traceability objects. The workflow therefore separates data generation, representation, feature extraction, validation, and reporting so that a thesis result can be traced from a claim back to a configuration, table, figure, or log.
+
+For thesis purposes, the workflow should be interpreted as an audit architecture. The important methodological point is not only that the stages run, but that each stage emits durable artifacts with stable schemas. This permits independent validation of artifact counts, condition labels, replicate counts, backend use, baseline selection, and external-test availability.
 
 \subsection{Stream generation}
+\label{subsec:stream-generation}
 
 For each condition, the pipeline records the algorithm, mode, replicate index, master seed, key material where applicable, nonce or initialization value where applicable, plaintext pattern or generator parameters, stream length, software version, and SHA-256 digest of the generated stream. This manifest-based design permits exact auditing of generated data and derived features. The deterministic SHA-256 expansion condition is used as the primary reproducibility baseline for distance-to-baseline analyses, while OS CSPRNG output is retained as a sensitivity condition because it is not exactly reproducible across runs.
 
 \subsection{Embedding}
+\label{subsec:embedding}
 
 The configured analysis uses two point-cloud embeddings. The byte-pair embedding maps successive byte pairs to two-dimensional points normalized to the unit square. The sliding-window embedding maps overlapping byte windows to fixed-dimensional vectors. Cubical encodings are implemented as an explicitly configured extension path and reshape byte streams into grayscale arrays before cubical persistence is computed.
 
 \subsection{Topological features}
+\label{subsec:topological-features}
 
 Persistent-homology features are computed from each embedded point cloud or cubical input. The feature set includes interval counts, finite interval counts, mean finite lifetime, finite-lifetime standard deviation, maximum finite lifetime, and persistence entropy for homology dimensions zero and one. These features summarize connected-component and loop structure across filtration scale. Manuscript-grade results require a true persistent-homology backend such as ripser or GUDHI; development fallback outputs are restricted to smoke testing and are not used for publication claims.
 
 \subsection{Conventional diagnostics}
+\label{subsec:conventional-diagnostics}
 
 The repository includes lightweight internal randomness diagnostics for development and reproducibility checks. External randomness-test integration exports generated streams into binary files with SHA-256 digests and provides parsing support for Dieharder-style result tables. NIST SP 800-22 and Dieharder outputs are treated as conventional statistical diagnostics and are compared with topological summaries rather than interpreted as proof of cipher security.
+
+\subsection{Evidence registration and claim control}
+\label{subsec:evidence-registration}
+
+Each evidentiary run is accompanied by an evidence register that records configuration, validation status, artifact scale, backend status, external-test status, registered figures, and registered logs. Result claims in the thesis should be traceable to one or more registered tables, figures, or validation logs. This requirement is the main guardrail against overstating preliminary or unregistered observations.
