@@ -3,12 +3,19 @@
 % ************************************************************
 
 \section{Results}
+\label{sec:results}
+
+The results are organized around three registered internal evidence runs. The first is the six-condition 64-replicate manuscript-scale run. The second is the eight-condition weak-control sensitivity extension. The third is an alternate-seed robustness check for the weak-control sensitivity extension. All evidentiary claims in this section are scoped to internal TDA summaries, internal diagnostics, validation logs, and evidence registers. External randomness testing was recorded as unavailable on the local execution path when Dieharder was not installed.
+
+\subsection{Primary six-condition run}
+\label{subsec:primary-six-condition-results}
 
 The primary internal analysis used the \texttt{configs/experiment\_64rep.json} configuration. This run generated 384 streams, 768 embeddings, 1,536 persistent-homology feature rows, 384 internal randomness-diagnostic rows, and 1,536 distance-to-baseline rows. Artifact-coherence validation passed, artifact-consistency validation passed, and the observed persistent-homology backend was \texttt{ripser}. No fallback backend was detected. The configured baseline condition for distance calculations was \texttt{sha256\_seeded\_baseline}.
 
-\subsection{Primary topological separation}
+\subsection{LCG weak-control separation}
+\label{subsec:lcg-results}
 
-The strongest and most stable separation occurred for the LCG weak-control condition under the byte-pair embedding in homology dimension zero. Relative to the SHA-256 seeded baseline, LCG showed near-complete separation in both H0 persistence entropy and H0 Euclidean feature distance. For H0 persistence entropy, the LCG comparison had Cliff's $\delta = 0.9751$ and a Mann--Whitney $p$ value of $1.83 \times 10^{-21}$. For H0 distance-to-baseline, the LCG comparison had Cliff's $\delta = 0.9834$ and a Mann--Whitney $p$ value of $8.35 \times 10^{-22}$.
+The strongest and most stable separation in the six-condition run occurred for the LCG weak-control condition under the byte-pair embedding in homology dimension zero. Relative to the SHA-256 seeded baseline, LCG showed near-complete separation in both H0 persistence entropy and H0 Euclidean feature distance. For H0 persistence entropy, the LCG comparison had Cliff's $\delta = 0.9751$ and a Mann--Whitney $p$ value of $1.83 \times 10^{-21}$. For H0 distance-to-baseline, the LCG comparison had Cliff's $\delta = 0.9834$ and a Mann--Whitney $p$ value of $8.35 \times 10^{-22}$.
 
 \begin{table}[htbp]
 \centering
@@ -30,39 +37,54 @@ LCG weak control & byte-pair & H1 & Persistence entropy & 64 & 64 & 0.3154 & 0.0
 The H1 persistence-entropy comparison for LCG under the byte-pair embedding was smaller but still detectable in the 64-replicate run, with Cliff's $\delta = 0.3154$ and $p = 0.00210$. This secondary result suggests that the byte-pair representation contains some H1-sensitive structure for the LCG weak control, but the principal evidence remains the H0 separation.
 
 \subsection{AES-CTR, OS CSPRNG, and xorshift32 comparisons}
+\label{subsec:primary-non-lcg-comparisons}
 
-The AES-CTR deterministic-output conditions did not show comparable separation from the SHA-256 seeded baseline. In the byte-pair H0 persistence-entropy comparison, AES-CTR with deterministic plaintext had Cliff's $\delta = 0.0273$ and $p = 0.7914$, while the AES-CTR zero-plaintext keystream condition had Cliff's $\delta = 0.0264$ and $p = 0.7988$. The corresponding byte-pair H0 distance-to-baseline effects were also small, with Cliff's $\delta = 0.0220$ for deterministic plaintext and $\delta = 0.0469$ for the zero-plaintext keystream condition.
+The AES-CTR deterministic-output conditions did not show comparable separation from the SHA-256 seeded baseline in the six-condition run. In the byte-pair H0 persistence-entropy comparison, AES-CTR with deterministic plaintext had Cliff's $\delta = 0.0273$ and $p = 0.7914$, while the AES-CTR zero-plaintext keystream condition had Cliff's $\delta = 0.0264$ and $p = 0.7988$. The corresponding byte-pair H0 distance-to-baseline effects were also small, with Cliff's $\delta = 0.0220$ for deterministic plaintext and $\delta = 0.0469$ for the zero-plaintext keystream condition.
 
 Operating-system CSPRNG output also remained close to the SHA-256 seeded baseline under the tested features. For byte-pair H0 persistence entropy, the OS CSPRNG comparison had Cliff's $\delta = 0.1431$ and $p = 0.1633$; for byte-pair H0 distance-to-baseline, Cliff's $\delta = 0.0215$ and $p = 0.8358$. The xorshift32 weak-control condition did not show the same topological separation as LCG under this configuration. Its byte-pair H0 persistence-entropy comparison had Cliff's $\delta = 0.1616$ and $p = 0.1153$, and its byte-pair H0 distance-to-baseline comparison had Cliff's $\delta = -0.0117$ and $p = 0.9108$.
 
+\subsection{Weak-control sensitivity extension}
+\label{subsec:weak-control-sensitivity-results}
+
+The weak-control sensitivity extension added two deliberately structured conditions, \texttt{periodic\_byte\_weak} and \texttt{biased\_byte\_weak}, to the six-condition design. The 64-replicate run generated 512 streams, 1,024 embeddings, 2,048 TDA feature rows, 512 internal randomness rows, and 2,048 distance-to-baseline rows. The backend was \texttt{ripser}; no fallback backend was detected.
+
+This extension produced the expected positive-control pattern. The biased and periodic byte-stream controls dominated the largest effect-size rows, with multiple Cliff's $\delta = \pm 1.0$ comparisons across distance-to-baseline and persistence-entropy summaries. The original LCG weak control remained a strong signal. AES-CTR, OS CSPRNG, and xorshift32 did not show comparable top-ranked separation in the reviewed effect-size table.
+
+\subsection{Alternate-seed robustness check}
+\label{subsec:seed-robustness-results}
+
+The seed-robustness run repeated the eight-condition weak-control design with an alternate deterministic master seed in \texttt{configs/experiment\_weak\_controls\_seed\_robustness\_64rep.json}. This run generated 512 streams, 1,024 embeddings, 2,048 TDA feature rows, 512 internal randomness rows, 0 external randomness rows, 4 backend-summary rows, 32 feature-summary rows, and 2,048 distance-to-baseline rows. Coherence validation passed for 8 conditions, 2 embeddings, H0/H1, 64 replicates, and the SHA-256 seeded baseline. The observed backend was \texttt{ripser}; no fallback backend was detected.
+
+The alternate-seed effect-size table reproduced the weak-control sensitivity pattern. The biased byte weak-control condition showed maximum separation in multiple summaries, including sliding-window H1 distance-to-baseline, byte-pair H1 distance-to-baseline, sliding-window H1 persistence entropy, sliding-window H0 distance-to-baseline, sliding-window H0 persistence entropy, and byte-pair H0 distance-to-baseline. The periodic byte weak-control condition also showed maximum or near-maximum separation, including byte-pair H0 distance-to-baseline, byte-pair H0 persistence entropy, byte-pair H1 distance-to-baseline, sliding-window H0 distance-to-baseline, byte-pair H1 persistence entropy, and sliding-window H1 distance-to-baseline.
+
 \begin{table}[htbp]
 \centering
-\caption{Selected 64-replicate byte-pair H0 comparisons relative to the SHA-256 seeded baseline}
-\label{tab:selected-h0-effects}
+\caption{Selected alternate-seed weak-control robustness effects relative to the SHA-256 seeded baseline}
+\label{tab:seed-robustness-effects}
 \begin{adjustbox}{max width=\textwidth}
-\begin{tabular}{llrr}
+\begin{tabular}{llllrr}
 \toprule
-Condition & Metric & Cliff's $\delta$ & $p$ value \\
+Condition & Embedding & Homology & Metric & Cliff's $\delta$ & $p$ value \\
 \midrule
-AES-CTR deterministic plaintext & Persistence entropy & 0.0273 & 0.7914 \\
-AES-CTR zero-plaintext keystream & Persistence entropy & 0.0264 & 0.7988 \\
-OS CSPRNG & Persistence entropy & 0.1431 & 0.1633 \\
-xorshift32 weak control & Persistence entropy & 0.1616 & 0.1153 \\
-LCG weak control & Persistence entropy & 0.9751 & $1.83 \times 10^{-21}$ \\
-AES-CTR deterministic plaintext & Distance to baseline & 0.0220 & 0.8321 \\
-AES-CTR zero-plaintext keystream & Distance to baseline & 0.0469 & 0.6490 \\
-OS CSPRNG & Distance to baseline & 0.0215 & 0.8358 \\
-xorshift32 weak control & Distance to baseline & -0.0117 & 0.9108 \\
-LCG weak control & Distance to baseline & 0.9834 & $8.35 \times 10^{-22}$ \\
+Biased byte weak control & sliding-window & H1 & Distance to baseline & 1.0000 & $1.71 \times 10^{-22}$ \\
+Periodic byte weak control & byte-pair & H0 & Distance to baseline & 1.0000 & $1.71 \times 10^{-22}$ \\
+Periodic byte weak control & byte-pair & H0 & Persistence entropy & -1.0000 & $1.71 \times 10^{-22}$ \\
+Biased byte weak control & sliding-window & H1 & Persistence entropy & 1.0000 & $5.21 \times 10^{-23}$ \\
+LCG weak control & byte-pair & H0 & Distance to baseline & 0.8838 & $6.50 \times 10^{-18}$ \\
+LCG weak control & byte-pair & H0 & Persistence entropy & 0.8525 & $8.92 \times 10^{-17}$ \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
 \end{table}
 
+In contrast, the largest reviewed AES-CTR, OS CSPRNG, and xorshift32 effects in the alternate-seed run were much smaller than the deliberately structured controls. This supports the interpretation that the TDA summaries are detecting deliberately introduced structure in positive controls rather than producing indiscriminate large effects across all non-baseline conditions.
+
 \subsection{External randomness-test status}
+\label{subsec:external-randomness-status-results}
 
-The external randomness-test pathway exported replicate-zero streams for all six configured conditions at 8 MiB per file and generated a schema-valid external randomness table. Dieharder was not available on the local execution path used for this run, so no external Dieharder rows were populated. The evidence register therefore records the external runner status as \texttt{UNAVAILABLE}, with the message \texttt{Dieharder executable not found on PATH: dieharder}. These records establish that external testing was attempted and audited, but they do not constitute completed external randomness-test evidence.
+The external randomness-test pathway exported replicate-zero streams and generated schema-valid external randomness tables. Dieharder was not available on the local execution path used for these runs, so no external Dieharder rows were populated. The evidence registers record the external runner status as \texttt{UNAVAILABLE}, with the message \texttt{Dieharder executable not found on PATH: dieharder}. These records establish that external testing was attempted and audited, but they do not constitute completed external randomness-test evidence.
 
-\subsection{Interpretation of the internal run}
+\subsection{Summary interpretation}
+\label{subsec:results-summary-interpretation}
 
-Taken together, the 64-replicate internal run supports the pipeline as a positive-control diagnostic for at least one weak generator. The LCG condition was consistently separated from the SHA-256 seeded baseline under byte-pair H0 summaries, while AES-CTR deterministic-output conditions, OS CSPRNG output, and xorshift32 did not show comparable separation under the current embeddings and feature set. These findings should be interpreted as diagnostic evidence about the tested representations and summaries, not as a cryptanalytic claim or as proof of security for any cipher or random source.
+Taken together, the registered internal runs support the pipeline as a reproducible diagnostic for deliberately structured weak controls. The evidence supports TDA as an auxiliary control-condition diagnostic under the tested embeddings, baseline, features, and validation gates. It does not support a cipher break, an AES vulnerability claim, a practical cryptanalytic attack, or security certification.
