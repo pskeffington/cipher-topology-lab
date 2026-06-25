@@ -4,19 +4,73 @@
 
 \appendix
 \section{Replication Appendix}
+\label{app:replication}
 
 \subsection{Repository and workflow}
+\label{app:repository-workflow}
 
-The manuscript evidence package is generated from the public repository workflow. The current manuscript evidence configuration is \texttt{configs/experiment\_64rep.json}; the smaller engineering smoke-test configuration is \texttt{configs/smoke\_test.json}. Smoke-test outputs are used only for engineering validation and are not treated as manuscript evidence.
+The manuscript evidence package is generated from the public repository workflow. The current primary manuscript evidence configuration is \texttt{configs/experiment\_64rep.json}. The weak-control sensitivity configuration is \texttt{configs/experiment\_weak\_controls\_64rep.json}. The alternate-seed robustness configuration is \texttt{configs/experiment\_weak\_controls\_seed\_robustness\_64rep.json}. Smaller smoke-test configurations are used only for engineering validation and are not treated as manuscript-scale evidence.
+
+The recommended full workflow command is:
+
+\begin{verbatim}
+./scripts/run_segmented.sh full --strict --python .venv/bin/python \
+  --config configs/experiment_weak_controls_seed_robustness_64rep.json
+\end{verbatim}
+
+The corresponding validation and evidence commands are:
+
+\begin{verbatim}
+.venv/bin/python scripts/08_validate_artifact_coherence.py \
+  --config configs/experiment_weak_controls_seed_robustness_64rep.json
+.venv/bin/python scripts/09_validate_artifact_consistency.py \
+  --config configs/experiment_weak_controls_seed_robustness_64rep.json
+.venv/bin/python scripts/10_effect_size_tables.py \
+  --config configs/experiment_weak_controls_seed_robustness_64rep.json
+.venv/bin/python scripts/12_run_external_randomness.py --allow-missing-dieharder
+.venv/bin/python scripts/09_build_evidence_register.py \
+  --config configs/experiment_weak_controls_seed_robustness_64rep.json \
+  --output docs/evidence_register_weak_controls_seed_robustness.md
+\end{verbatim}
 
 \subsection{Eligibility criteria for manuscript evidence}
+\label{app:evidence-eligibility}
 
 A run is eligible for manuscript evidence only if artifact-coherence validation passes and the generated backend summary confirms manuscript-grade persistent-homology backends such as \texttt{ripser} or \texttt{gudhi\_cubical}. Any run containing \texttt{fallback\_threshold\_graph} is excluded from manuscript claims. H1 figures are eligible only when the corresponding backend and embedding produce finite H1 intervals. Distance-to-baseline figures are eligible only when the table identifies the configured baseline condition and the interpretation reflects that baseline.
 
-\subsection{Required artifacts}
+\subsection{Registered evidence files}
+\label{app:registered-evidence-files}
 
-The replication package requires stream manifests, embedding manifests, backend summaries, topological feature summaries, distance-to-baseline tables, internal randomness diagnostics, and imported external randomness-test outputs where available. The evidence register records the artifact paths, validation status, observed backends, external randomness-test status, generated figures, and generated logs. The external randomness-test table may be schema-only until Dieharder, NIST SP 800-22, or another external suite has been run and imported.
+The current thesis scope is supported by three evidence-register files:
+
+\begin{itemize}
+  \item \texttt{docs/evidence\_register.md}
+  \item \texttt{docs/evidence\_register\_weak\_controls.md}
+  \item \texttt{docs/evidence\_register\_weak\_controls\_seed\_robustness.md}
+\end{itemize}
+
+Each evidence register records the artifact paths, validation status, observed backends, external randomness-test status, generated figures, and generated logs. The external randomness-test table may be schema-only until Dieharder, NIST SP 800-22, or another external suite has been run and imported.
+
+\subsection{Required artifacts}
+\label{app:required-artifacts}
+
+The replication package requires stream manifests, embedding manifests, backend summaries, topological feature summaries, distance-to-baseline tables, internal randomness diagnostics, and imported external randomness-test outputs where available. For the seed-robustness 64-replicate run, the registered artifact scale is 512 streams, 1,024 embeddings, 2,048 TDA feature rows, 512 internal randomness rows, 0 external randomness rows, 4 backend-summary rows, 32 feature-summary rows, and 2,048 distance-to-baseline rows.
+
+\subsection{Claim traceability checklist}
+\label{app:claim-traceability-checklist}
+
+Before a result claim is added to the manuscript, the following checklist should be satisfied:
+
+\begin{enumerate}
+  \item The claim names the relevant configuration file.
+  \item The claim identifies the baseline condition when using distance-to-baseline summaries.
+  \item The claim is supported by a registered table, figure, validation log, or evidence register.
+  \item The backend status is manuscript-grade and no fallback backend is used for the claim.
+  \item The claim does not imply cipher breaking, vulnerability discovery, or security certification.
+  \item External randomness-test claims are made only if an external test table is populated by a completed external run.
+\end{enumerate}
 
 \subsection{Interpretive limits}
+\label{app:interpretive-limits}
 
-The analysis is a diagnostic comparison of topological and statistical summaries under controlled stream-generation conditions. It does not constitute a cryptanalytic attack, a proof of cipher security, or a replacement for formal analysis of AES, Ascon, DES, TDEA, or any other cryptographic primitive.
+The analysis is a diagnostic comparison of topological and statistical summaries under controlled stream-generation conditions. It does not constitute a cryptanalytic attack, a proof of cipher security, or a replacement for formal analysis of AES, Ascon, DES, TDEA, or any other cryptographic primitive. Any future extension to additional ciphers, embeddings, or external test batteries should be registered as a separate evidence block before being used for thesis claims.
