@@ -20,6 +20,10 @@ The weak-control sensitivity pattern was then rerun under an alternate determini
 
 External randomness testing is supported but may be unavailable on a local machine if `dieharder` is not installed. The external-randomness runner writes an explicit status report even when Dieharder is missing, so evidence files distinguish unavailable external infrastructure from completed external analysis. The current local weak-control and seed-robustness evidence registers record external testing as unavailable, not completed.
 
+## Portfolio status
+
+The current portfolio-facing status is maintained in `docs/portfolio_status.md`. The project now serves as a portfolio anchor for reproducible research engineering, applied computational topology, cryptographic implementation diagnostics, evidence-register design, object-oriented scientific workflow architecture, and thesis-ready technical writing.
+
 ## Latest daily update
 
 The May 26, 2026 documentation update is recorded in `docs/daily_updates/2026-05-26.md`. It captures the current generated CSV artifact families, the active figure set for persistence-entropy and distance-to-OS-CSPRNG diagnostics, and the project claim boundary: diagnostic and reproducibility evidence only, not cryptanalysis.
@@ -84,6 +88,7 @@ cipher-topology-lab/
 │   ├── evidence_register.md
 │   ├── evidence_register_weak_controls.md
 │   ├── evidence_register_weak_controls_seed_robustness.md
+│   ├── portfolio_status.md
 │   └── publication_plan.md
 ├── manuscript/
 │   ├── main.tex
@@ -235,4 +240,4 @@ The current repository state is sufficient for a defensible methods/results thes
 
 ## Status
 
-`v0.4.1-pre.0`: execution-repair pre-release with deterministic baseline, corrected AES-CTR metadata language, stratified TDA outputs, standardized distance metrics, object-oriented segmented workflow, 64-replicate `ripser` evidence, weak-control sensitivity extension, alternate-seed robustness evidence, related-work manuscript section, failure-safe external-randomness status reporting, and dated documentation updates for the artifact/figure inventory, weak-control evidence boundary, and thesis-readiness state.
+`v0.4.1-pre.0`: execution-repair pre-release with deterministic baseline, corrected AES-CTR metadata language, stratified TDA outputs, standardized distance metrics, object-oriented segmented workflow, 64-replicate `ripser` evidence, weak-control sensitivity extension, alternate-seed robustness evidence, portfolio status documentation, related-work manuscript section, failure-safe external-randomness status reporting, and dated documentation updates for the artifact/figure inventory, weak-control evidence boundary, and thesis-readiness state.
