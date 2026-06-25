@@ -91,6 +91,33 @@ def xorshift32_stream(spec: StreamSpec) -> tuple[bytes, dict[str, str]]:
     return bytes(out[: spec.n_bytes]), {"algorithm": "xorshift32", "mode": "weak-control"}
 
 
+
+def periodic_byte_stream(spec: StreamSpec) -> tuple[bytes, dict[str, str]]:
+    pattern = deterministic_bytes(
+        f"periodic-byte-pattern:{spec.master_seed}:{spec.replicate}",
+        16,
+    )
+    repeats = (spec.n_bytes // len(pattern)) + 1
+    stream = (pattern * repeats)[: spec.n_bytes]
+    return stream, {
+        "algorithm": "periodic-byte-pattern",
+        "mode": "weak-control",
+        "period_bytes": str(len(pattern)),
+    }
+
+
+def biased_byte_stream(spec: StreamSpec) -> tuple[bytes, dict[str, str]]:
+    rng = random.Random(f"biased-byte-weak:{spec.master_seed}:{spec.replicate}")
+    out = bytearray()
+    while len(out) < spec.n_bytes:
+        value = rng.randrange(0, 64)
+        out.append(value)
+    return bytes(out), {
+        "algorithm": "biased-byte-generator",
+        "mode": "weak-control",
+        "bias": "values restricted to 0..63",
+    }
+
 def generate_stream(spec: StreamSpec) -> tuple[bytes, dict[str, str]]:
     if spec.condition in {
         "aes128_ctr_random_plaintext",
@@ -128,6 +155,17 @@ def generate_stream(spec: StreamSpec) -> tuple[bytes, dict[str, str]]:
 
     if spec.condition == "xorshift32_weak":
         stream, meta = xorshift32_stream(spec)
+        meta["plaintext_pattern"] = "n/a"
+        return stream, meta
+
+
+    if spec.condition == "periodic_byte_weak":
+        stream, meta = periodic_byte_stream(spec)
+        meta["plaintext_pattern"] = "n/a"
+        return stream, meta
+
+    if spec.condition == "biased_byte_weak":
+        stream, meta = biased_byte_stream(spec)
         meta["plaintext_pattern"] = "n/a"
         return stream, meta
 
