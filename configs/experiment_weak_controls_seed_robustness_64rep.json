@@ -1,0 +1,36 @@
+{
+  "project": "cipher-topology-lab",
+  "version": "0.4.1-pre.0-weak-controls-seed-robustness-64rep",
+  "master_seed": 20260625,
+  "stream_bytes": 1048576,
+  "replicates": 64,
+  "baseline_condition": "sha256_seeded_baseline",
+  "conditions": [
+    "aes128_ctr_xor_deterministic_plaintext",
+    "aes128_ctr_keystream_zero_plaintext",
+    "sha256_seeded_baseline",
+    "os_csprng",
+    "lcg_weak",
+    "xorshift32_weak",
+    "periodic_byte_weak",
+    "biased_byte_weak"
+  ],
+  "embeddings": [
+    {
+      "name": "byte_pair_2d",
+      "dimension": 2,
+      "stride": 2,
+      "sample_points": 4096
+    },
+    {
+      "name": "sliding_window_8d",
+      "dimension": 8,
+      "stride": 1,
+      "sample_points": 2048
+    }
+  ],
+  "tda": {
+    "max_edge_length": 0.35,
+    "max_dimension": 1
+  }
+}
