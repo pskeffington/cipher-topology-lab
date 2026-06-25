@@ -3,9 +3,30 @@
 % ************************************************************
 
 \section{Introduction}
+\label{sec:introduction}
 
-Modern symmetric cryptography depends not only on the mathematical design of standardized algorithms, but also on the empirical behavior of implementations, modes of operation, randomness sources, and generated output streams. The Advanced Encryption Standard remains the primary standardized block cipher for confidentiality applications, and its counter-mode output provides a useful setting for studying whether auxiliary diagnostics can reveal structural differences between high-quality cipher outputs, deterministic reproducibility baselines, and weak or intentionally structured controls.
+\subsection{Motivation}
+\label{subsec:introduction-motivation}
 
-This paper evaluates persistent homology as a complementary diagnostic for ciphertext-derived data. The premise is limited. Topological data analysis cannot replace cryptanalysis, security proofs, or standardized randomness testing. It may, however, provide interpretable summaries of geometric and connectivity structure after byte streams are embedded as point clouds or cubical complexes. A useful diagnostic need not break a cipher; it only needs to show reproducible sensitivity to known weak controls while remaining appropriately cautious when modern cipher outputs resemble high-quality baseline streams.
+Modern symmetric cryptography depends not only on the mathematical design of standardized algorithms, but also on the empirical behavior of implementations, modes of operation, randomness sources, and generated output streams. The Advanced Encryption Standard remains the primary standardized block cipher for confidentiality applications, and counter-mode output provides a useful setting for studying whether auxiliary diagnostics can reveal structural differences between high-quality cipher outputs, deterministic reproducibility baselines, and weak or intentionally structured controls.
+
+The central premise of this thesis is deliberately limited. Topological data analysis cannot replace cryptanalysis, security proofs, or standardized randomness testing. It may, however, provide interpretable summaries of geometric and connectivity structure after byte streams are embedded as point clouds or cubical complexes. A useful diagnostic need not break a cipher; it only needs to show reproducible sensitivity to known weak controls while remaining appropriately cautious when modern cipher outputs resemble high-quality baseline streams.
+
+\subsection{Research question}
+\label{subsec:research-question}
+
+This thesis asks whether persistent-homology features can distinguish structured or weakened generation conditions from deterministic cryptographic baselines and weak controls, and whether those summaries can be organized into a reproducible evidence pipeline suitable for audit and extension.
+
+The empirical question is evaluated through three registered evidence blocks: a six-condition 64-replicate internal TDA run, an eight-condition weak-control sensitivity extension, and an alternate-seed robustness check of the weak-control sensitivity design. These runs evaluate byte-pair and sliding-window embeddings, H0/H1 persistent-homology summaries, internal randomness diagnostics, effect-size tables, and validation gates.
+
+\subsection{Contributions}
+\label{subsec:introduction-contributions}
 
 The contribution of this study is a reproducible workflow for generating controlled symmetric-cipher outputs and generator outputs, transforming those outputs into topological representations, computing persistent-homology features, and comparing those features with conventional randomness diagnostics. The framework is designed for transparent replication and extension rather than one-off visual pattern finding.
+
+The thesis contributes four specific elements. First, it defines a deterministic stream-generation and manifest system for controlled cipher-output and generator-output comparisons. Second, it implements an object-oriented staged workflow that separates generation, embedding, feature extraction, diagnostics, validation, evidence registration, and manuscript production. Third, it demonstrates that deliberately structured weak controls separate from a SHA-256 seeded baseline under registered topological summaries. Fourth, it provides a claim-control framework that prevents diagnostic evidence from being overstated as cryptanalysis, vulnerability discovery, or security certification.
+
+\subsection{Scope and non-claims}
+\label{subsec:introduction-scope}
+
+The study is scoped as computational diagnostics. It does not claim to break AES, Ascon, DES, TDEA, or any other standardized cipher. It does not claim that persistent-homology summaries certify cipher security. It does not claim completed external randomness-test evidence when Dieharder is unavailable. The results should be interpreted as evidence about the tested representations, controls, baselines, and workflow, not as a direct statement about the security of any cryptographic primitive.
