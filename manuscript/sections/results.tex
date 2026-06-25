@@ -17,22 +17,7 @@ The primary internal analysis used the \texttt{configs/experiment\_64rep.json} c
 
 The strongest and most stable separation in the six-condition run occurred for the LCG weak-control condition under the byte-pair embedding in homology dimension zero. Relative to the SHA-256 seeded baseline, LCG showed near-complete separation in both H0 persistence entropy and H0 Euclidean feature distance. For H0 persistence entropy, the LCG comparison had Cliff's $\delta = 0.9751$ and a Mann--Whitney $p$ value of $1.83 \times 10^{-21}$. For H0 distance-to-baseline, the LCG comparison had Cliff's $\delta = 0.9834$ and a Mann--Whitney $p$ value of $8.35 \times 10^{-22}$.
 
-\begin{table}[htbp]
-\centering
-\caption{Primary 64-replicate LCG weak-control effects relative to the SHA-256 seeded baseline}
-\label{tab:primary-lcg-effects}
-\begin{adjustbox}{max width=\textwidth}
-\begin{tabular}{llllrrrr}
-\toprule
-Comparison & Embedding & Homology & Metric & $n$ & Baseline $n$ & Cliff's $\delta$ & $p$ value \\
-\midrule
-LCG weak control & byte-pair & H0 & Persistence entropy & 64 & 64 & 0.9751 & $1.83 \times 10^{-21}$ \\
-LCG weak control & byte-pair & H0 & Distance to baseline & 64 & 64 & 0.9834 & $8.35 \times 10^{-22}$ \\
-LCG weak control & byte-pair & H1 & Persistence entropy & 64 & 64 & 0.3154 & 0.00210 \\
-\bottomrule
-\end{tabular}
-\end{adjustbox}
-\end{table}
+\input{tables/primary_lcg_effects}
 
 The H1 persistence-entropy comparison for LCG under the byte-pair embedding was smaller but still detectable in the 64-replicate run, with Cliff's $\delta = 0.3154$ and $p = 0.00210$. This secondary result suggests that the byte-pair representation contains some H1-sensitive structure for the LCG weak control, but the principal evidence remains the H0 separation.
 
@@ -57,25 +42,7 @@ The seed-robustness run repeated the eight-condition weak-control design with an
 
 The alternate-seed effect-size table reproduced the weak-control sensitivity pattern. The biased byte weak-control condition showed maximum separation in multiple summaries, including sliding-window H1 distance-to-baseline, byte-pair H1 distance-to-baseline, sliding-window H1 persistence entropy, sliding-window H0 distance-to-baseline, sliding-window H0 persistence entropy, and byte-pair H0 distance-to-baseline. The periodic byte weak-control condition also showed maximum or near-maximum separation, including byte-pair H0 distance-to-baseline, byte-pair H0 persistence entropy, byte-pair H1 distance-to-baseline, sliding-window H0 distance-to-baseline, byte-pair H1 persistence entropy, and sliding-window H1 distance-to-baseline.
 
-\begin{table}[htbp]
-\centering
-\caption{Selected alternate-seed weak-control robustness effects relative to the SHA-256 seeded baseline}
-\label{tab:seed-robustness-effects}
-\begin{adjustbox}{max width=\textwidth}
-\begin{tabular}{llllrr}
-\toprule
-Condition & Embedding & Homology & Metric & Cliff's $\delta$ & $p$ value \\
-\midrule
-Biased byte weak control & sliding-window & H1 & Distance to baseline & 1.0000 & $1.71 \times 10^{-22}$ \\
-Periodic byte weak control & byte-pair & H0 & Distance to baseline & 1.0000 & $1.71 \times 10^{-22}$ \\
-Periodic byte weak control & byte-pair & H0 & Persistence entropy & -1.0000 & $1.71 \times 10^{-22}$ \\
-Biased byte weak control & sliding-window & H1 & Persistence entropy & 1.0000 & $5.21 \times 10^{-23}$ \\
-LCG weak control & byte-pair & H0 & Distance to baseline & 0.8838 & $6.50 \times 10^{-18}$ \\
-LCG weak control & byte-pair & H0 & Persistence entropy & 0.8525 & $8.92 \times 10^{-17}$ \\
-\bottomrule
-\end{tabular}
-\end{adjustbox}
-\end{table}
+\input{tables/seed_robustness_effects}
 
 In contrast, the largest reviewed AES-CTR, OS CSPRNG, and xorshift32 effects in the alternate-seed run were much smaller than the deliberately structured controls. This supports the interpretation that the TDA summaries are detecting deliberately introduced structure in positive controls rather than producing indiscriminate large effects across all non-baseline conditions.
 
