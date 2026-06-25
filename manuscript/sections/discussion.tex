@@ -3,13 +3,37 @@
 % ************************************************************
 
 \section{Discussion}
+\label{sec:discussion}
 
-The 64-replicate internal run provides evidence that the topological pipeline can recover at least one designed weak-generator positive control. The clearest result was the separation of the LCG condition from the SHA-256 seeded baseline under byte-pair H0 summaries. This pattern appeared in both persistence entropy and Euclidean distance-to-baseline, indicating that the connected-component structure induced by the byte-pair point cloud was sensitive to the LCG stream structure.
+The registered evidence now supports a narrow but thesis-ready conclusion: persistent-homology summaries can reproducibly detect deliberately structured weak-control byte streams under the configured embeddings, baseline, and validation gates. The project is strongest when framed as a reproducible diagnostic and evidence-registration study, not as cryptanalysis.
 
-The same run did not show comparable separation for the AES-CTR deterministic-output conditions, OS CSPRNG output, or xorshift32 under the tested embeddings and feature set. This negative result is important for the interpretation of the method. The current evidence supports the pipeline as a diagnostic that can detect a specific weak positive control, but it does not support claims that these summaries distinguish AES-CTR output from the deterministic SHA-256 baseline in the present design. The xorshift32 result also suggests that not every weak generator will be detected by the current representation and feature set.
+\subsection{Diagnostic value of the topology pipeline}
+\label{subsec:diagnostic-value}
+
+The original six-condition 64-replicate run demonstrated that the pipeline could recover a designed weak-generator positive control. The clearest result was the separation of the LCG condition from the SHA-256 seeded baseline under byte-pair H0 summaries. This pattern appeared in both persistence entropy and Euclidean distance-to-baseline, indicating that the connected-component structure induced by the byte-pair point cloud was sensitive to the LCG stream structure.
+
+The weak-control sensitivity extension made the diagnostic interpretation stronger. By adding deliberately periodic and biased byte-stream controls, the pipeline was tested against controls with explicit structure. Those controls separated strongly from the SHA-256 seeded baseline, and the same pattern reproduced under an alternate deterministic master seed. This supports the interpretation that the workflow is sensitive to deliberately introduced structure rather than merely producing unstable run-specific artifacts.
+
+\subsection{Interpretation of non-separation}
+\label{subsec:non-separation}
+
+The AES-CTR deterministic-output conditions did not show comparable top-ranked separation from the SHA-256 seeded baseline under the tested features. The OS CSPRNG and xorshift32 conditions also remained closer to the baseline than the deliberately biased, periodic, and LCG controls. This negative result is important. The current evidence supports the pipeline as a control-condition diagnostic, but it does not support claims that the tested summaries distinguish AES-CTR output from the deterministic SHA-256 baseline in a security-relevant way.
+
+The xorshift32 result also shows that not every weak generator is necessarily detected by the current representation and feature set. This limits generalization: the pipeline detects some structured controls under some embeddings, but it is not yet a universal weak-generator detector.
+
+\subsection{Role of the SHA-256 baseline and OS CSPRNG condition}
+\label{subsec:baseline-role}
 
 The distinction between the SHA-256 reproducibility baseline and OS CSPRNG sensitivity condition remains central. Distance-to-baseline summaries should be read as distances from the configured deterministic baseline, not as proof that any stream is cryptographically random. OS CSPRNG comparisons are useful for sensitivity analysis but should not be treated as exactly reproducible reference values across independent executions.
 
-The external randomness-test pathway is implemented and audited, but external Dieharder evidence is not yet populated. The current evidence register records the external runner status as \texttt{UNAVAILABLE} because the Dieharder executable was not found on the local execution path. This is preferable to silent omission because it distinguishes an infrastructure limitation from a completed external-test comparison. The present manuscript therefore supports claims only from the internal topological feature tables, internal randomness diagnostics, validation logs, and the explicit external-test status report.
+\subsection{External randomness testing}
+\label{subsec:external-testing-discussion}
 
-Several limitations follow from the current pre-release design. The external randomness-test table remains schema-valid but unpopulated, so future work should run Dieharder or NIST SP 800-22 in an environment where those tools are available and import their results through the repository parser. The configured embeddings are intentionally narrow, limited to byte-pair and sliding-window representations. Future runs should add additional replicate scales, explicitly configured cubical-complex experiments, and additional weak-generator controls before broader claims are made about diagnostic coverage across cipher families or weak-generator classes.
+The external randomness-test pathway is implemented and audited, but external Dieharder evidence is not yet populated for the local runs. The evidence registers record the external runner status as \texttt{UNAVAILABLE} because the Dieharder executable was not found on the local execution path. This is preferable to silent omission because it distinguishes an infrastructure limitation from a completed external-test comparison. The present thesis should therefore support claims only from the internal topological feature tables, internal randomness diagnostics, validation logs, and explicit external-test status reports unless external testing is later completed in Docker or a Linux environment.
+
+\subsection{Limitations and scope control}
+\label{subsec:limitations}
+
+Several limitations follow from the current design. The external randomness-test table remains schema-valid but unpopulated, so future work should run Dieharder or NIST SP 800-22 in an environment where those tools are available and import their results through the repository parser. The configured embeddings are intentionally narrow, limited to byte-pair and sliding-window representations. The empirical scope does not include Ascon, DES, or TDEA results. Those comparators remain roadmap items until their generators, configurations, and evidence registers are implemented and validated.
+
+Most importantly, the results are diagnostic and reproducibility evidence. They do not show a cipher break, an AES vulnerability, an exploit, or a security certification. The appropriate interpretation is that registered TDA summaries can supplement control-condition analysis by detecting deliberately structured weak streams under the tested design.
