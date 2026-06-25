@@ -2,7 +2,7 @@
 
 ## Status
 
-Smoke workflow completed and the internal evidence gates passed for `configs/smoke_test.json`.
+Smoke workflow completed and the internal evidence gates passed for `configs/smoke_test.json`. External randomness status is now closed as explicitly unavailable on the current machine because Dieharder is not installed.
 
 ## Configuration
 
@@ -36,7 +36,7 @@ Artifact consistency validation passed: baseline=sha256_seeded_baseline, distanc
 | `data/interim/embedding_manifest.csv` | present | 24 |
 | `data/processed/tda_features.csv` | present | 48 |
 | `data/processed/randomness_tests_internal.csv` | present | 12 |
-| `data/processed/external_randomness_tests.csv` | missing | NA |
+| `data/processed/external_randomness_tests.csv` | present | 0 |
 | `results/tables/tda_backend_summary.csv` | present | 4 |
 | `results/tables/tda_feature_summary.csv` | present | 24 |
 | `results/tables/tda_distance_to_sha256_seeded_baseline.csv` | present | 48 |
@@ -50,16 +50,16 @@ This is sufficient for the smoke-stage internal TDA gate. It does not yet promot
 
 ## External randomness status
 
-External randomness evidence is not yet closed for the smoke register:
+External randomness evidence is now closed as an explicit unavailable-status state for this machine:
 
 - External randomness table: `data/processed/external_randomness_tests.csv`
-- Rows: missing
+- Rows: `0`
 - Populated: `False`
 - Status report: `results/logs/external_randomness_status.md`
-- External runner status: missing
-- External runner message: no external randomness status report found
+- External runner status: `UNAVAILABLE`
+- External runner message: `Dieharder executable not found on PATH: dieharder`
 
-Next action: run the external randomness status stage with `--allow-missing-dieharder`, then regenerate the smoke register so the missing status is replaced with an explicit available or unavailable state.
+This is an acceptable evidence-register state for honest reporting. It does not support claims that external randomness testing was completed. It supports the more limited claim that external randomness testing infrastructure was checked and recorded as unavailable.
 
 ## Registered smoke figures
 
@@ -69,13 +69,19 @@ The smoke register includes persistence-entropy and distance-to-baseline figures
 
 The smoke pass demonstrates that the internal pipeline can generate coherent artifacts for six conditions, two embeddings, H0/H1 summaries, and a SHA-256 seeded baseline-distance table under a two-replicate test configuration.
 
-This supports proceeding to external-status closure and then the 64-replicate run, but it does not by itself support manuscript-scale result claims.
+External randomness is unavailable on the current machine because Dieharder is not installed, so external comparison claims remain withheld.
+
+This supports proceeding to the 64-replicate internal rebuild, but it does not by itself support manuscript-scale result claims.
 
 ## Next commands
 
 ```bash
+./scripts/run_segmented.sh full --strict --python .venv/bin/python --config configs/experiment_64rep.json
+.venv/bin/python scripts/08_validate_artifact_coherence.py --config configs/experiment_64rep.json
+.venv/bin/python scripts/09_validate_artifact_consistency.py --config configs/experiment_64rep.json
+.venv/bin/python scripts/10_effect_size_tables.py --config configs/experiment_64rep.json
 .venv/bin/python scripts/12_run_external_randomness.py --allow-missing-dieharder
-.venv/bin/python scripts/09_build_evidence_register.py --config configs/smoke_test.json --output docs/evidence_register_smoke.md
+.venv/bin/python scripts/09_build_evidence_register.py --config configs/experiment_64rep.json --output docs/evidence_register.md
 ```
 
-If the regenerated smoke register records external randomness as explicitly unavailable or populated, proceed to the 64-replicate internal rebuild.
+If the regenerated 64-replicate register passes coherence and consistency with `ripser` and no fallback backend, then README, publication plan, manuscript, CV, and LinkedIn language can be reconciled against the registered artifacts.
