@@ -1,0 +1,20 @@
+% ************************************************************
+% PRIMARY LCG EFFECTS TABLE
+% ************************************************************
+
+\begin{table}[htbp]
+\centering
+\caption{Primary 64-replicate LCG weak-control effects relative to the SHA-256 seeded baseline}
+\label{tab:primary-lcg-effects}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{llllrrrr}
+\toprule
+Comparison & Embedding & Homology & Metric & $n$ & Baseline $n$ & Cliff's $\delta$ & $p$ value \\
+\midrule
+LCG weak control & byte-pair & H0 & Persistence entropy & 64 & 64 & 0.9751 & $1.83 \times 10^{-21}$ \\
+LCG weak control & byte-pair & H0 & Distance to baseline & 64 & 64 & 0.9834 & $8.35 \times 10^{-22}$ \\
+LCG weak control & byte-pair & H1 & Persistence entropy & 64 & 64 & 0.3154 & 0.00210 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}
