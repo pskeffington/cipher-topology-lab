@@ -2,7 +2,7 @@
 
 ## Current status
 
-`cipher-topology-lab` has moved from execution repair into thesis/manuscript scaffolding.
+`cipher-topology-lab` has moved from execution repair into thesis/manuscript scaffolding and planned experiment expansion.
 
 The project now has a defensible empirical core for a diagnostic and reproducibility thesis:
 
@@ -12,6 +12,8 @@ The project now has a defensible empirical core for a diagnostic and reproducibi
 - Evidence-register traceability for artifact scale, validation status, backend status, external-test status, registered figures, and registered logs.
 - Object-oriented segmented workflow for generation, embedding, feature extraction, diagnostics, validation, effects, evidence registration, and manuscript build.
 - Modular LaTeX thesis scaffold with preamble objects, section files, table modules, figure inventory, and evidence mapping.
+
+The next empirical expansion is registered as a staged plan rather than as an open-ended search. The expansion tests seed stability, replicate-scale stability, embedding sample-size sensitivity, and optional external randomness completion.
 
 ## Current thesis-ready claim
 
@@ -66,6 +68,26 @@ Primary result: deliberately periodic and biased controls separate strongly from
 
 Primary result: the weak-control sensitivity pattern reproduces under an alternate deterministic master seed.
 
+## Planned experiment expansion
+
+The experiment expansion plan is documented in `docs/experiment_expansion_plan.md`.
+
+Planned configs:
+
+- `configs/experiment_weak_controls_seed_sweep_20260701_64rep.json`
+- `configs/experiment_weak_controls_seed_sweep_20260702_64rep.json`
+- `configs/experiment_weak_controls_replication_128rep.json`
+- `configs/experiment_weak_controls_embedding_sensitivity_64rep.json`
+
+Expansion purpose:
+
+- Test additional deterministic seed stability.
+- Test 128-replicate scale stability.
+- Test embedding sample-size sensitivity.
+- Complete external randomness comparison only if Dieharder or an equivalent battery is run in a suitable environment.
+
+Expanded-footing language should remain conditional until those runs are executed and evidence registers are written.
+
 ## External randomness status
 
 The external randomness pathway is implemented and audited. Local Dieharder execution remains unavailable where `dieharder` is not installed. Evidence registers distinguish this state from completed external testing.
@@ -91,7 +113,7 @@ Completed manuscript infrastructure:
 - Manuscript evidence map.
 - LaTeX workflow documentation.
 
-Current next step: compile locally with `make manuscript`, fix LaTeX errors, then curate final tables and registered figure wrappers.
+Current next step: run the experiment expansion ladder, compile locally with `make manuscript`, fix LaTeX errors, then curate final tables and registered figure wrappers.
 
 ## Portfolio role
 
@@ -103,6 +125,7 @@ This repository now serves as a portfolio anchor for:
 - Evidence-register and claim-control design.
 - Object-oriented scientific workflow architecture.
 - Thesis-ready technical writing and artifact packaging.
+- Experiment planning with explicit pass/fail criteria.
 
 ## Public claim boundary
 
@@ -113,6 +136,7 @@ Allowed:
 - Alternate-seed robustness for the weak-control pattern.
 - Evidence-register traceability.
 - Explicit external-test availability status.
+- Planned expansion for seed sweep, replicate-scale check, and embedding sensitivity.
 
 Avoid:
 
@@ -122,6 +146,7 @@ Avoid:
 - Security certification.
 - Completed Dieharder comparison unless future evidence is registered.
 - Claims that TDA proves randomness or cipher security.
+- Expanded-footing claims before the expansion configs are executed and registered.
 
 ## Recommended portfolio blurb
 
@@ -129,4 +154,4 @@ Avoid:
 
 ## Current priority
 
-Freeze the empirical scope unless external randomness testing is deliberately added through Docker or Linux. Prioritize thesis build, final tables/figures, and portfolio-facing narrative.
+Run the staged expansion plan in order: seed sweep, replicate-scale check, embedding sample-size sensitivity, and optional external randomness completion. Keep claims conditional until each expansion run has a corresponding evidence register.
