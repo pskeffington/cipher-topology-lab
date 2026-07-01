@@ -20,6 +20,20 @@ The weak-control sensitivity pattern was then rerun under an alternate determini
 
 External randomness testing is supported but may be unavailable on a local machine if `dieharder` is not installed. The external-randomness runner writes an explicit status report even when Dieharder is missing, so evidence files distinguish unavailable external infrastructure from completed external analysis. The current local weak-control and seed-robustness evidence registers record external testing as unavailable, not completed.
 
+## Platform continuance
+
+This repository is now being continued as a platform asset, not only as a single research experiment.
+
+Platform continuation surfaces:
+
+- [`docs/platform_continuance.md`](docs/platform_continuance.md) — platform thesis, lanes, milestones, and operating rules.
+- [`docs/development_backlog.md`](docs/development_backlog.md) — prioritized engineering backlog for platform report generation, demo hardening, claim validation, and expansion execution.
+- [`docs/productization_roadmap.md`](docs/productization_roadmap.md) — productization lanes, packaging gates, buyer/sponsor framing, and conversion path.
+- [`docs/experiment_expansion_plan.md`](docs/experiment_expansion_plan.md) — registered empirical expansion ladder.
+- [`docs/portfolio_status.md`](docs/portfolio_status.md) — current portfolio and thesis-readiness state.
+
+Immediate platform objective: add a platform report object and deterministic demo surface that make the project reviewable by technical sponsors, portfolio reviewers, and research audiences without expanding the scientific claim boundary.
+
 ## Portfolio status
 
 The current portfolio-facing status is maintained in `docs/portfolio_status.md`. The project now serves as a portfolio anchor for reproducible research engineering, applied computational topology, cryptographic implementation diagnostics, evidence-register design, object-oriented scientific workflow architecture, and thesis-ready technical writing.
@@ -83,6 +97,9 @@ cipher-topology-lab/
 │   ├── lab_notes/
 │   │   ├── 2026-06-25-seed-robustness-pass.md
 │   │   └── 2026-06-25-weak-control-sensitivity.md
+│   ├── platform_continuance.md
+│   ├── development_backlog.md
+│   ├── productization_roadmap.md
 │   ├── protocol.md
 │   ├── data_dictionary.md
 │   ├── evidence_register.md
