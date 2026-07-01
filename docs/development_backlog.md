@@ -2,7 +2,19 @@
 
 ## Priority order
 
-This backlog converts `cipher-topology-lab` from a high-value research asset into a continuing platform. Tasks are ordered to preserve scientific claim control while improving demo, review, and productization readiness.
+This backlog converts `cipher-topology-lab` from a high-value research asset into a continuing platform. Tasks are ordered to preserve scientific claim control while improving demo, review, productization readiness, and foundation revenue-cycle potential.
+
+## Strategic revenue filter
+
+Prioritize work that increases one of the following:
+
+1. paid pilot readiness;
+2. buyer trust and due-diligence confidence;
+3. repeatable evidence-report delivery;
+4. foundation-aligned public-impact value;
+5. reuse across GIS, RAG, document, and regulated-data workflows.
+
+Defer speculative features that do not support near-term demo, pilot, report, or sponsor-review conversion.
 
 ## P0 — Claim safety and platform control
 
@@ -177,7 +189,30 @@ Acceptance criteria:
 - results do not degrade into indiscriminate separation;
 - backend remains manuscript-grade.
 
-## P3 — Productization and valuation integration
+## P3 — Foundation revenue-cycle productization
+
+### P3.0 RAG provenance paid-pilot wedge
+
+Goal: keep the first commercial package pointed toward high revenue-cycle potential, large institutional impact, and high ROI per engineering input.
+
+Primary product frame:
+
+> AI Source Provenance and Trust Readiness Scan.
+
+Output:
+
+- `docs/foundation_revenue_strategy.md`
+- `docs/rag_provenance_scanner.md`
+- `results/provenance/rag_provenance_manifest.json`
+- `results/provenance/rag_provenance_report.md`
+
+Acceptance criteria:
+
+- buyer can understand the source-provenance risk being reduced;
+- report can be delivered as a bounded paid pilot;
+- GIS, document, dataset, and code/config assets are classified;
+- unknown, stale, draft, archived, and GIS candidate assets are flagged;
+- claim boundary remains provenance evidence only.
 
 ### P3.1 Export platform object for CV valuation
 
@@ -222,50 +257,85 @@ Goal: define a paid/sponsored pilot without making unsupported security claims.
 
 Output:
 
-- `docs/pilot_package_outline.md`
+- `docs/rag_provenance_pilot_package.md`
 
-Pilot shape:
+Required sections:
 
-- diagnostic workflow review;
-- generated-data control analysis;
-- reproducibility/evidence-register setup;
-- claim-boundary audit;
-- final report.
+- buyer profile;
+- pain statement;
+- scan scope;
+- deliverables;
+- acceptance criteria;
+- pricing posture;
+- limitations;
+- follow-on expansion.
 
-## P4 — External testing decision
+### P3.4 Add RAG answer verifier
 
-### P4.1 Docker Dieharder path
-
-Goal: support external randomness testing on systems without native Dieharder.
-
-Potential outputs:
-
-- `docker/dieharder/Dockerfile`
-- `scripts/run_dieharder_docker.sh`
-- `docs/external_randomness_docker.md`
-
-Acceptance criteria:
-
-- output files parse through existing parser;
-- evidence register records completed external rows;
-- manuscript language distinguishes internal TDA evidence from external randomness tests.
-
-### P4.2 External comparison deferral note
-
-Goal: preserve external comparison as future work if completion is out of scope.
+Goal: prove whether a generated answer cites only approved manifest assets and chunk hashes.
 
 Output:
 
-- update manuscript discussion and portfolio status.
+- `src/ciphertopology/rag_verifier.py`
+- `scripts/16_verify_rag_answer.py`
+- fixture-backed tests
 
 Acceptance criteria:
 
-- no ambiguity between unavailable external infrastructure and completed external testing.
+- accepts a manifest and answer-citation object;
+- verifies file hash and chunk hash references;
+- flags missing, unapproved, stale, or unknown citations;
+- writes a compact verification report.
 
-## Current recommended sprint
+### P3.5 Add GIS provenance profile
 
-1. Add `scripts/13_build_platform_report.py`.
-2. Add `make platform-report`.
-3. Add `docs/platform_walkthrough.md`.
-4. Add `docs/productization_status.md`.
-5. Update README with the new platform continuation links.
+Goal: convert town-layer and infrastructure data work into a high-impact AI-security deliverable.
+
+Output:
+
+- `docs/gis_provenance_profile.md`
+- GIS layer class fields in manifest policy guidance
+
+Acceptance criteria:
+
+- recognizes civic/infrastructure layer classes;
+- supports missing-sector scan language;
+- supports municipal/infrastructure pilot framing.
+
+## P4 — Productization and valuation integration
+
+### P4.1 Product one-pager
+
+Goal: support sponsor, foundation, and buyer outreach.
+
+Output:
+
+- `docs/resilient_provenance_one_pager.md`
+
+### P4.2 Repeatable pilot report generator
+
+Goal: convert scan output into a buyer-ready deliverable.
+
+Output:
+
+- `results/provenance/pilot_report.md`
+
+### P4.3 Signature-ready manifest
+
+Goal: move from hashing-only provenance to stronger chain-of-custody posture.
+
+Output:
+
+- manifest signing design note;
+- optional signature field schema;
+- verifier acceptance criteria.
+
+## Current go-forward decision
+
+Continue development as a dual-use platform:
+
+1. **Research path:** thesis/manuscript, expansion runs, evidence registers.
+2. **Platform path:** demo/report generator, claim-boundary tooling, productization walkthrough, CV valuation integration.
+3. **Revenue path:** RAG provenance scanner, GIS/infrastructure trust profile, paid-pilot package, and repeatable source-trust reports.
+
+The revenue path should receive priority whenever it increases pilot readiness without weakening the scientific claim boundary.
