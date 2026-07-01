@@ -24,19 +24,53 @@ External randomness testing is supported but may be unavailable on a local machi
 
 This repository is now being continued as a platform asset, not only as a single research experiment.
 
+The platform is separated into three layers:
+
+1. **Research core** — topological diagnostics of generated cryptographic byte streams.
+2. **Provenance platform** — cryptographic source and citation evidence for AI/RAG workflows.
+3. **GIS/topology extension** — civic and infrastructure layer provenance for high-impact AI-security pilots.
+
+This separation is documented in [`docs/architecture_separation.md`](docs/architecture_separation.md). The platform extension does not expand the cipher/TDA research claim into cryptanalysis, security certification, infrastructure certification, or model-safety certification.
+
 Platform continuation surfaces:
 
+- [`docs/architecture_separation.md`](docs/architecture_separation.md) — separation between research core, provenance platform, and GIS/topology extension.
 - [`docs/platform_continuance.md`](docs/platform_continuance.md) — platform thesis, lanes, milestones, and operating rules.
-- [`docs/development_backlog.md`](docs/development_backlog.md) — prioritized engineering backlog for platform report generation, demo hardening, claim validation, and expansion execution.
+- [`docs/development_backlog.md`](docs/development_backlog.md) — prioritized engineering backlog for platform report generation, demo hardening, claim validation, revenue-cycle execution, and expansion execution.
 - [`docs/productization_roadmap.md`](docs/productization_roadmap.md) — productization lanes, packaging gates, buyer/sponsor framing, and conversion path.
+- [`docs/foundation_revenue_strategy.md`](docs/foundation_revenue_strategy.md) — highest-ROI revenue-path strategy for foundation-aligned pilots.
+- [`docs/rag_provenance_scanner.md`](docs/rag_provenance_scanner.md) — RAG source-provenance scanner documentation.
+- [`docs/rag_provenance_pilot_package.md`](docs/rag_provenance_pilot_package.md) — paid pilot package for AI source provenance and trust readiness scans.
+- [`docs/gis_provenance_profile.md`](docs/gis_provenance_profile.md) — GIS/infrastructure layer provenance profile.
+- [`docs/resilient_provenance_one_pager.md`](docs/resilient_provenance_one_pager.md) — buyer-facing one-pager for the Resilient Provenance product line.
 - [`docs/experiment_expansion_plan.md`](docs/experiment_expansion_plan.md) — registered empirical expansion ladder.
 - [`docs/portfolio_status.md`](docs/portfolio_status.md) — current portfolio and thesis-readiness state.
 
-Immediate platform objective: add a platform report object and deterministic demo surface that make the project reviewable by technical sponsors, portfolio reviewers, and research audiences without expanding the scientific claim boundary.
+Immediate platform objective: preserve the research claim boundary while adding deterministic evidence, provenance, and pilot-report surfaces that make the project reviewable by technical sponsors, portfolio reviewers, and municipal/infrastructure buyers.
+
+## Revenue-path extension: Resilient Provenance
+
+The first revenue-path product line is **Resilient Provenance**:
+
+> A cryptographic provenance layer for proving which source files and chunks entered an AI retrieval pipeline, which assets require review, and which answer citations can be traced back to approved source material.
+
+The near-term paid pilot package is:
+
+> **AI Source Provenance and Trust Readiness Scan**
+
+Current revenue-path capabilities:
+
+- source inventory manifest;
+- SHA-256 file fingerprints;
+- deterministic chunk hashes for readable text assets;
+- RAG answer citation verification;
+- GIS/infrastructure candidate-sector profile;
+- buyer-readable pilot report;
+- remediation backlog and claim-boundary language.
 
 ## Portfolio status
 
-The current portfolio-facing status is maintained in `docs/portfolio_status.md`. The project now serves as a portfolio anchor for reproducible research engineering, applied computational topology, cryptographic implementation diagnostics, evidence-register design, object-oriented scientific workflow architecture, and thesis-ready technical writing.
+The current portfolio-facing status is maintained in `docs/portfolio_status.md`. The project now serves as a portfolio anchor for reproducible research engineering, applied computational topology, cryptographic implementation diagnostics, evidence-register design, object-oriented scientific workflow architecture, thesis-ready technical writing, and modular AI/RAG provenance tooling.
 
 ## Latest daily update
 
@@ -45,6 +79,8 @@ The May 26, 2026 documentation update is recorded in `docs/daily_updates/2026-05
 The weak-control sensitivity note is recorded in `docs/lab_notes/2026-06-25-weak-control-sensitivity.md`.
 
 The seed-robustness thesis-status note is recorded in `docs/lab_notes/2026-06-25-seed-robustness-pass.md`.
+
+The RAG provenance scanner note is recorded in `docs/lab_notes/2026-07-01-rag-provenance-scanner.md`.
 
 ## Primary contribution
 
@@ -55,6 +91,13 @@ A reproducible pipeline that:
 3. Computes persistent-homology features.
 4. Benchmarks topological summaries against conventional randomness diagnostics.
 5. Produces manuscript-ready tables, figures, validation logs, external-test status logs, effect-size summaries, and an evidence register.
+
+Platform extensions add:
+
+1. Source and chunk provenance manifests for AI/RAG assets.
+2. Answer-citation verification against approved manifest records.
+3. GIS/infrastructure source-readiness profiling.
+4. Buyer-readable pilot reports for foundation-aligned revenue cycles.
 
 ## Cipher scope
 
@@ -72,7 +115,9 @@ DES and TDEA are not treated as modern security targets. Ascon, DES, and TDEA ar
 
 ## Why this project is data-accessible
 
-No restricted datasets are required. The complete primary dataset is generated locally from documented seeds, keys, CTR initial values, plaintext patterns, and generator settings. The OS CSPRNG condition is retained as a non-deterministic sensitivity condition, not as the primary reproducibility baseline.
+No restricted datasets are required for the research core. The complete primary dataset is generated locally from documented seeds, keys, CTR initial values, plaintext patterns, and generator settings. The OS CSPRNG condition is retained as a non-deterministic sensitivity condition, not as the primary reproducibility baseline.
+
+The platform extension can also be run against local folders, repositories, document exports, or GIS/data directories when a buyer, sponsor, or foundation workflow provides the source set.
 
 ## Repository structure
 
@@ -93,28 +138,29 @@ cipher-topology-lab/
 │   └── processed/
 ├── docs/
 │   ├── daily_updates/
-│   │   └── 2026-05-26.md
 │   ├── lab_notes/
-│   │   ├── 2026-06-25-seed-robustness-pass.md
-│   │   └── 2026-06-25-weak-control-sensitivity.md
-│   ├── platform_continuance.md
+│   ├── architecture_separation.md
 │   ├── development_backlog.md
+│   ├── foundation_revenue_strategy.md
+│   ├── gis_provenance_profile.md
+│   ├── platform_continuance.md
 │   ├── productization_roadmap.md
-│   ├── protocol.md
-│   ├── data_dictionary.md
-│   ├── evidence_register.md
-│   ├── evidence_register_weak_controls.md
-│   ├── evidence_register_weak_controls_seed_robustness.md
-│   ├── portfolio_status.md
-│   └── publication_plan.md
+│   ├── rag_provenance_pilot_package.md
+│   ├── rag_provenance_scanner.md
+│   ├── resilient_provenance_one_pager.md
+│   └── portfolio_status.md
+├── examples/
+│   └── rag_answer_citation_example.json
 ├── manuscript/
 │   ├── main.tex
 │   ├── references.bib
 │   └── sections/
 ├── results/
 │   ├── figures/
-│   ├── tables/
-│   └── logs/
+│   ├── logs/
+│   ├── platform/
+│   ├── provenance/
+│   └── tables/
 ├── scripts/
 │   ├── 00_generate_streams.py
 │   ├── 01_embed_ciphertext.py
@@ -130,6 +176,10 @@ cipher-topology-lab/
 │   ├── 10_effect_size_tables.py
 │   ├── 11_run_micro_workflow.py
 │   ├── 12_run_external_randomness.py
+│   ├── 13_rag_provenance_scan.py
+│   ├── 16_verify_rag_answer.py
+│   ├── 17_gis_provenance_profile.py
+│   ├── 18_build_provenance_pilot_report.py
 │   └── run_segmented.sh
 ├── src/
 │   └── ciphertopology/
@@ -175,6 +225,38 @@ results/logs/segmented_run_report.md
 ```
 
 Use `--fail-fast` only when you want to stop at the first failed stage.
+
+## Revenue-path workflow
+
+Build the current buyer-facing provenance pilot artifacts:
+
+```bash
+make revenue-demo CLIENT="Example Town"
+```
+
+This runs:
+
+1. `make rag-provenance`
+2. `make gis-profile`
+3. `make provenance-pilot-report`
+
+Default outputs:
+
+```text
+results/provenance/rag_provenance_manifest.json
+results/provenance/rag_provenance_report.md
+results/provenance/gis_provenance_profile.json
+results/provenance/gis_provenance_profile.md
+results/provenance/pilot_report.md
+```
+
+Verify a RAG answer citation object against the manifest:
+
+```bash
+make rag-verify ANSWER=examples/rag_answer_citation_example.json
+```
+
+The example file contains placeholder hashes. Replace the placeholder asset and chunk IDs with values from a generated manifest before using it as a passing verification example.
 
 ## Segmented micro-stages
 
@@ -251,10 +333,12 @@ make smoke
 
 This project is suitable for an applied cryptography, cybersecurity engineering, computational topology, or reproducible research venue. The paper should be framed as a diagnostic and reproducibility contribution, not as cryptanalysis.
 
+The platform extension can be separately framed as an AI source-provenance, evidence-register, and GIS/infrastructure source-readiness system. That platform framing should remain separate from the empirical cipher/TDA claim.
+
 ## Thesis readiness
 
 The current repository state is sufficient for a defensible methods/results thesis centered on reproducible topological diagnostics of generated byte-stream controls. Remaining thesis work is primarily manuscript construction, figure/table curation, limitations language, and either completing external randomness testing in a suitable environment or explicitly preserving it as future work.
 
 ## Status
 
-`v0.4.1-pre.0`: execution-repair pre-release with deterministic baseline, corrected AES-CTR metadata language, stratified TDA outputs, standardized distance metrics, object-oriented segmented workflow, 64-replicate `ripser` evidence, weak-control sensitivity extension, alternate-seed robustness evidence, portfolio status documentation, related-work manuscript section, failure-safe external-randomness status reporting, and dated documentation updates for the artifact/figure inventory, weak-control evidence boundary, and thesis-readiness state.
+`v0.4.1-pre.0`: execution-repair pre-release with deterministic baseline, corrected AES-CTR metadata language, stratified TDA outputs, standardized distance metrics, object-oriented segmented workflow, 64-replicate `ripser` evidence, weak-control sensitivity extension, alternate-seed robustness evidence, portfolio status documentation, related-work manuscript section, failure-safe external-randomness status reporting, dated documentation updates for the artifact/figure inventory, weak-control evidence boundary, thesis-readiness state, and modular provenance/GIS pilot scaffolding for foundation-aligned revenue-path development.
