@@ -1,4 +1,4 @@
-.PHONY: setup setup-smoke data embed features analysis export-randomness external-randomness evidence-register platform-report platform-demo claim-check platform-validate manuscript clean clean-generated test smoke micro micro-smoke micro-full micro-stage segmented-smoke segmented-full segmented-stage segmented-list
+.PHONY: setup setup-smoke data embed features analysis export-randomness external-randomness evidence-register platform-report platform-artifact-check platform-demo claim-check platform-validate manuscript clean clean-generated test smoke micro micro-smoke micro-full micro-stage segmented-smoke segmented-full segmented-stage segmented-list
 
 CONFIG ?= configs/experiment_v0.json
 SMOKE_CONFIG ?= configs/smoke_test.json
@@ -40,12 +40,15 @@ evidence-register:
 platform-report:
 	$(PYTHON) scripts/13_build_platform_report.py
 
+platform-artifact-check:
+	$(PYTHON) scripts/15_validate_platform_artifacts.py
+
 claim-check:
 	$(PYTHON) scripts/14_validate_claim_boundaries.py
 
-platform-validate: platform-report claim-check
+platform-validate: platform-report platform-artifact-check claim-check
 
-platform-demo: segmented-smoke platform-report claim-check
+platform-demo: segmented-smoke platform-report platform-artifact-check claim-check
 
 micro:
 	$(PYTHON) scripts/11_run_micro_workflow.py --config $(CONFIG)
