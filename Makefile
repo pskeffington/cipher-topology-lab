@@ -1,10 +1,11 @@
-.PHONY: setup setup-smoke data embed features analysis export-randomness external-randomness evidence-register rag-provenance rag-verify platform-report platform-artifact-check platform-demo claim-check platform-validate manuscript clean clean-generated test smoke micro micro-smoke micro-full micro-stage segmented-smoke segmented-full segmented-stage segmented-list
+.PHONY: setup setup-smoke data embed features analysis export-randomness external-randomness evidence-register rag-provenance rag-verify gis-profile provenance-pilot-report revenue-demo platform-report platform-artifact-check platform-demo claim-check platform-validate manuscript clean clean-generated test smoke micro micro-smoke micro-full micro-stage segmented-smoke segmented-full segmented-stage segmented-list
 
 CONFIG ?= configs/experiment_v0.json
 SMOKE_CONFIG ?= configs/smoke_test.json
 PYTHON ?= .venv/bin/python
 STAGE ?= all
 ANSWER ?= examples/rag_answer_citation_example.json
+CLIENT ?= Pilot Client
 
 setup:
 	python3 -m venv .venv
@@ -43,6 +44,14 @@ rag-provenance:
 
 rag-verify:
 	$(PYTHON) scripts/16_verify_rag_answer.py --answer $(ANSWER)
+
+gis-profile:
+	$(PYTHON) scripts/17_gis_provenance_profile.py
+
+provenance-pilot-report:
+	$(PYTHON) scripts/18_build_provenance_pilot_report.py --client-name "$(CLIENT)"
+
+revenue-demo: rag-provenance gis-profile provenance-pilot-report
 
 platform-report:
 	$(PYTHON) scripts/13_build_platform_report.py
