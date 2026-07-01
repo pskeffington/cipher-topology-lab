@@ -1,0 +1,13 @@
+{
+  "answer_id": "example-answer-001",
+  "answer_text": "Example answer text. The verifier only checks citation provenance fields, not answer truth.",
+  "citations": [
+    {
+      "citation_id": "citation-001",
+      "path": "docs/rag_provenance_scanner.md",
+      "asset_sha256": "replace-with-manifest-asset-sha256",
+      "chunk_id": "replace-with-manifest-chunk-id",
+      "chunk_sha256": "replace-with-manifest-chunk-sha256"
+    }
+  ]
+}
