@@ -1,4 +1,4 @@
-.PHONY: setup setup-smoke data embed features analysis export-randomness external-randomness evidence-register manuscript clean clean-generated test smoke micro micro-smoke micro-full micro-stage segmented-smoke segmented-full segmented-stage segmented-list
+.PHONY: setup setup-smoke data embed features analysis export-randomness external-randomness evidence-register platform-report platform-demo manuscript clean clean-generated test smoke micro micro-smoke micro-full micro-stage segmented-smoke segmented-full segmented-stage segmented-list
 
 CONFIG ?= configs/experiment_v0.json
 SMOKE_CONFIG ?= configs/smoke_test.json
@@ -37,6 +37,11 @@ external-randomness:
 evidence-register:
 	$(PYTHON) scripts/09_build_evidence_register.py --config $(CONFIG) --output docs/evidence_register.md
 
+platform-report:
+	$(PYTHON) scripts/13_build_platform_report.py
+
+platform-demo: segmented-smoke platform-report
+
 micro:
 	$(PYTHON) scripts/11_run_micro_workflow.py --config $(CONFIG)
 
@@ -62,7 +67,7 @@ segmented-list:
 	bash scripts/run_segmented.sh list
 
 clean-generated:
-	rm -rf data/raw/* data/interim/* data/processed/* results/figures/* results/tables/* results/logs/* external_tests/inputs/* external_tests/results/*
+	rm -rf data/raw/* data/interim/* data/processed/* results/figures/* results/tables/* results/logs/* results/platform/* external_tests/inputs/* external_tests/results/*
 
 smoke: clean-generated
 	$(PYTHON) scripts/00_generate_streams.py --config $(SMOKE_CONFIG)
